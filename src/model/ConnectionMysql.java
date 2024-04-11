@@ -1,4 +1,4 @@
-package controller;
+package model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,11 +17,14 @@ public class ConnectionMysql {
     private static final String DATABASE = "";
 
     // Abrir la conexion de la base de datos
-    public void openConnection() {
+    public Connection openConnection() {
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:" + PORT + "/" + DATABASE +"?serverTimezone=Europe/Madrid&useSSL=false", USERNAME, PASSWORD);
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:" + PORT + "/" + DATABASE + "?serverTimezone=Europe/Madrid&useSSL=false", USERNAME, PASSWORD);
+            return conn;
         } catch (SQLException e) {
             System.out.println("Error al intentar abrir la BD");
+            e.printStackTrace();
+            return null;
         }
     }
 
