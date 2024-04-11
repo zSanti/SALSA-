@@ -52,66 +52,34 @@ public class Hamburger extends JFrame {
 		panel_1.setBackground(Color.BLACK);
 		contentPane.add(panel_1);
 		
-        JButton btnNewButton = createButton("Inicio");
-        contentPane.add(btnNewButton);
+        JButton btnIndex = createButton("Inicio");
+        btnIndex.setBounds(254, 183, 176, 42);
+        contentPane.add(btnIndex);
 
-        JButton btnAjustes = createButton("Ajustes");
-        contentPane.add(btnAjustes);
-
-        JButton btnContacto = createButton("Contacto");
-        contentPane.add(btnContacto);
-
-        JButton btnAdministracin = createButton("Administración");
-        contentPane.add(btnAdministracin);
-
-        JButton btnCerrarSesin = createButton("Cerrar sesión");
-        contentPane.add(btnCerrarSesin);
-        
-        JButton btnSettings = new JButton("Ajustes");
-        btnSettings.setOpaque(false);
-        btnSettings.setForeground(Color.BLACK);
-        btnSettings.setFont(new Font("Tahoma", Font.BOLD, 20));
-        btnSettings.setContentAreaFilled(false);
-        btnSettings.setBorderPainted(false);
+        JButton btnSettings = createButton("Ajustes");
         btnSettings.setBounds(254, 247, 176, 42);
         contentPane.add(btnSettings);
-        
-        JButton btnAdministration = new JButton("Administración");
-        btnAdministration.setOpaque(false);
-        btnAdministration.setForeground(Color.BLACK);
-        btnAdministration.setFont(new Font("Tahoma", Font.BOLD, 20));
-        btnAdministration.setContentAreaFilled(false);
-        btnAdministration.setBorderPainted(false);
-        btnAdministration.setBounds(240, 373, 202, 42);
-        contentPane.add(btnAdministration);
-        
-        JButton btnContact = new JButton("Contacto");
-        btnContact.setOpaque(false);
-        btnContact.setForeground(Color.BLACK);
-        btnContact.setFont(new Font("Tahoma", Font.BOLD, 20));
-        btnContact.setContentAreaFilled(false);
-        btnContact.setBorderPainted(false);
+
+        JButton btnContact = createButton("Contacto");
         btnContact.setBounds(254, 309, 176, 42);
         contentPane.add(btnContact);
-        
-        JButton btnLogout = new JButton("Cerrar sesión");
-        btnLogout.setOpaque(false);
-        btnLogout.setForeground(Color.BLACK);
-        btnLogout.setFont(new Font("Tahoma", Font.BOLD, 20));
-        btnLogout.setContentAreaFilled(false);
-        btnLogout.setBorderPainted(false);
+
+        JButton btnAdministration = createButton("Administración");
+        btnAdministration.setBounds(240, 373, 202, 42);
+        contentPane.add(btnAdministration);
+
+        JButton btnLogout = createButton("Cerrar sesión");
         btnLogout.setBounds(254, 437, 176, 42);
         contentPane.add(btnLogout);
     }
 
     private JButton createButton(String text) {
-        JButton btnIndex = new JButton(text);
-        btnIndex.setBounds(254, 183, 176, 42);
-        btnIndex.setFont(new Font("Tahoma", Font.BOLD, 20));
-        btnIndex.setContentAreaFilled(false); // Establece el área de contenido del botón como no relleno
-        btnIndex.setOpaque(false); // Hace que el botón sea transparente
-        btnIndex.setBorderPainted(false); // Oculta el borde del botón
-        btnIndex.setForeground(Color.BLACK); // Establece el color del texto del botón
-        return btnIndex;
-	}
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("Tahoma", Font.BOLD, 20));
+        btn.setContentAreaFilled(false); // Establece el área de contenido del botón como no relleno
+        btn.setOpaque(false); // Hace que el botón sea transparente
+        btn.setBorderPainted(false); // Oculta el borde del botón
+        btn.setForeground(Color.BLACK); // Establece el color del texto del botón
+        return btn;
+    }
 }
