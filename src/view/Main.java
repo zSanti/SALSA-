@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.Image;
 
@@ -17,24 +16,9 @@ import java.awt.event.ActionEvent;
 public class Main extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    private JPanel BodyLayout;
+    private JPanel BodyLayout, emptyRow, itemsPanel;
     private JLabel logo;
-
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    Main frame = new Main();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+    private JButton btnCamisetas, btnSudaderas, btnPantalones, btnIniciarSesion;
 
     /**
      * Create the frame.
@@ -57,17 +41,17 @@ public class Main extends JFrame {
         BodyLayout.add(logo);
 
         // Añadir fila vacía debajo del logo
-        JPanel emptyRow = new JPanel();
+        emptyRow = new JPanel();
         emptyRow.setBounds(0, 150, 1066, 171); // Ajusta los valores según tu diseño
         BodyLayout.add(emptyRow);
         
         // Contenedor para la rejilla de articulos
-        JPanel itemsPanel = new JPanel();
+        itemsPanel = new JPanel();
         itemsPanel.setBounds(45, 435, 982, 318);
         BodyLayout.add(itemsPanel);
         itemsPanel.setLayout(new GridLayout(0, 4, 8, 10));
         
-        JButton btnCamisetas = new JButton("Camisetas");
+        btnCamisetas = new JButton("Camisetas");
         btnCamisetas.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         	}
@@ -75,7 +59,7 @@ public class Main extends JFrame {
         btnCamisetas.setBounds(226, 363, 165, 46);
         BodyLayout.add(btnCamisetas);
         
-        JButton btnSudaderas = new JButton("Sudaderas");
+        btnSudaderas = new JButton("Sudaderas");
         btnSudaderas.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         	}
@@ -83,13 +67,28 @@ public class Main extends JFrame {
         btnSudaderas.setBounds(656, 363, 165, 46);
         BodyLayout.add(btnSudaderas);
         
-        JButton btnPantalones = new JButton("Pantalones");
+        btnPantalones = new JButton("Pantalones");
         btnPantalones.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         	}
         });
         btnPantalones.setBounds(449, 363, 165, 46);
         BodyLayout.add(btnPantalones);
+        
+        btnIniciarSesion = new JButton("Iniciar sesión");
+        btnIniciarSesion.setBounds(10, 38, 113, 30);
+        BodyLayout.add(btnIniciarSesion);
+        
+	     // Agrego un evento al botón para enviar a la pagina de Login
+        btnIniciarSesion.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Crear una instancia de la vista Login
+                Login login = new Login();
+                login.setVisible(true);
+                // Ocultar la vista actual (Hamburger)
+                setVisible(false);
+            }
+        });
 
         // Agrega los elementos a la rejilla de artículos
         for (int i = 0; i < 8; i++) { // Por ejemplo, aquí se agregan 8 elementos
