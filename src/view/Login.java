@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -123,6 +125,16 @@ public class Login extends JFrame {
         linkRegister.setFont(new Font("Tahoma", Font.BOLD, 11));
         linkRegister.setForeground(new Color(0, 128, 255));
         linkRegister.setHorizontalAlignment(SwingConstants.LEFT);
+        linkRegister.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Crear una instancia de la vista Login
+                Register registro = new Register();
+                registro.setVisible(true);
+                // Ocultar la vista actual (Hamburger)
+                setVisible(false);
+            }
+        });
         panelRight.add(linkRegister);
         
     }
