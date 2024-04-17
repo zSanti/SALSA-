@@ -1,4 +1,4 @@
-package model;
+package clases;
 
 public class Tipo {
 

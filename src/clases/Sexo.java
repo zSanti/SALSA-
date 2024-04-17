@@ -1,4 +1,4 @@
-package model;
+package clases;
 
 public enum Sexo {
 	MASCULINO, FEMENINO, OTROS

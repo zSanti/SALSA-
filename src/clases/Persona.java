@@ -1,9 +1,9 @@
-package model;
+package clases;
 
 import java.time.LocalDate;
 
 public class Persona {
-	private String dni, nombre, apellido, email, direccion;
+	private String dni, nombre, apellido, email, direccion, contraseña;
 	private LocalDate fechaNacimiento;
 	private Sexo genero;
 
@@ -50,6 +50,11 @@ public class Persona {
 	public void setGenero(Sexo genero) {
 		this.genero = genero;
 	}
-	
+	public String getContraseña() {
+		return contraseña;
+	}
+	public void setContraseña(String contraseña) {
+		this.contraseña = contraseña;
+	}
 	
 }
