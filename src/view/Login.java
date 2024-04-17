@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +12,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import controller.Controlador;
+
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -30,27 +32,15 @@ public class Login extends JFrame {
     private JTextField inputEmail;
     private JPasswordField inputPassword;
     private JButton toggleButton;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login frame = new Login();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    
+    // 
+    private Controlador cont;
 
 	/**
 	 * Create the frame.
 	 */
-	public Login() {
+	public Login(Controlador cont) {
+		this.cont = cont;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 931, 574);
         BodyLayout = new JPanel();
@@ -129,7 +119,7 @@ public class Login extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Crear una instancia de la vista Login
-                Register registro = new Register();
+                Register registro = new Register(cont);
                 registro.setVisible(true);
                 // Ocultar la vista actual (Hamburger)
                 setVisible(false);
