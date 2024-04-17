@@ -11,7 +11,7 @@ public class Controlador {
 	}
 
 	public static boolean registrarUsuario(Persona per) {
-		Dao dao = new ImpleBD();
+		Dao dao = new ImpleDB();
 
 		return dao.registrarUsuario(per);
 
