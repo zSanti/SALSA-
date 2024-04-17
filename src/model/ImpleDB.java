@@ -19,36 +19,36 @@ public class ImpleDB implements Dao {
 	@Override
 	public boolean registrarUsuario(Persona per) {
 		conexion.openConnection();
-        PreparedStatement statementPersona = null;
-        PreparedStatement statementTrabajador = null;
-        PreparedStatement statementUsuario = null;
+        PreparedStatement stmtPersona = null;
+        PreparedStatement stmtTrabajador = null;
+        PreparedStatement stmtUsuario = null;
 
         try {
             // Inserción en la tabla persona
             String consultaPersona = "INSERT INTO persona (dni, nombre, apellido, fechaNac, contrasena, direccion, email, genero) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            statementPersona = conexion.prepareStatement(consultaPersona);
-            statementPersona.setString(1, per.getDni());
-            statementPersona.setString(2, per.getNombre());
-            statementPersona.setString(3, per.getApellido());
-            statementPersona.setString(4, per.getFechaNacimiento().toString());
-            statementPersona.setString(5, per.getContraseña());
-            statementPersona.setString(6, per.getDireccion());
-            statementPersona.setString(7, per.getEmail());
-            statementPersona.setString(8, per.getGenero().toString());
-            statementPersona.executeUpdate();
+            stmtPersona = ((Connection) conexion).prepareStatement(consultaPersona);
+            stmtPersona.setString(1, per.getDni());
+            stmtPersona.setString(2, per.getNombre());
+            stmtPersona.setString(3, per.getApellido());
+            stmtPersona.setString(4, per.getFechaNacimiento().toString());
+            stmtPersona.setString(5, per.getContraseña());
+            stmtPersona.setString(6, per.getDireccion());
+            stmtPersona.setString(7, per.getEmail());
+            stmtPersona.setString(8, per.getGenero().toString());
+            stmtPersona.executeUpdate();
 
             // Inserción en la tabla trabajador (simplemente inserta el DNI)
             String consultaTrabajador = "INSERT INTO trabajador (dni) VALUES (?)";
-            statementTrabajador = conexion.prepareStatement(consultaTrabajador);
-            statementTrabajador.setString(1, per.getDni());
-            statementTrabajador.executeUpdate();
+            stmtTrabajador = ((Connection) conexion).prepareStatement(consultaTrabajador);
+            stmtTrabajador.setString(1, per.getDni());
+            stmtTrabajador.executeUpdate();
 
             // Inserción en la tabla usuario (simplemente inserta el DNI y la fecha de registro)
             String consultaUsuario = "INSERT INTO usuario (dni, fechaReg) VALUES (?, ?)";
-            statementUsuario = conexion.prepareStatement(consultaUsuario);
-            statementUsuario.setString(1, per.getDni());
-            statementUsuario.setDate(2, java.sql.Date.valueOf(LocalDate.now())); // Fecha de registro actual
-            statementUsuario.executeUpdate();
+            stmtUsuario = ((Connection) conexion).prepareStatement(consultaUsuario);
+            stmtUsuario.setString(1, per.getDni());
+            stmtUsuario.setDate(2, java.sql.Date.valueOf(LocalDate.now())); // Fecha de registro actual
+            stmtUsuario.executeUpdate();
 
             // Si todas las inserciones fueron exitosas, retorna true
             return true;
@@ -56,10 +56,10 @@ public class ImpleDB implements Dao {
             e.printStackTrace();
             return false;
         } finally {
-            try { if (statementPersona != null) statementPersona.close(); } catch (SQLException e) { }
-            try { if (statementTrabajador != null) statementTrabajador.close(); } catch (SQLException e) { }
-            try { if (statementUsuario != null) statementUsuario.close(); } catch (SQLException e) { }
-            try { if (conexion != null) conexion.close(); } catch (SQLException e) { }
+            try { if (stmtPersona != null) stmtPersona.close(); } catch (SQLException e) { }
+            try { if (stmtTrabajador != null) stmtTrabajador.close(); } catch (SQLException e) { }
+            try { if (stmtUsuario != null) stmtUsuario.close(); } catch (SQLException e) { }
+            if (conexion != null) conexion.closeConnection();
         }
 	}
 }
