@@ -9,6 +9,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import controller.Controlador;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -20,6 +23,9 @@ public class Main extends JFrame {
     private JLabel logo;
     private JButton btnCamisetas, btnSudaderas, btnPantalones, btnIniciarSesion;
 
+    // 
+    private Controlador cont;
+    
     /**
      * Create the frame.
      */
@@ -83,7 +89,7 @@ public class Main extends JFrame {
         btnIniciarSesion.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Crear una instancia de la vista Login
-                Login login = new Login();
+                Login login = new Login(cont);
                 login.setVisible(true);
                 // Ocultar la vista actual (Hamburger)
                 setVisible(false);
