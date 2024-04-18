@@ -23,7 +23,7 @@ import clases.Persona;
 import clases.Sexo;
 import clases.Trabajador;
 import clases.Usuario;
-import controller.Controlador;
+import controller.Dao;
 
 public class Register extends JDialog implements ActionListener {
 
@@ -38,20 +38,10 @@ public class Register extends JDialog implements ActionListener {
 	private JRadioButton rBFemenino, rBMasculino, rBOtros;
 	
 	// Controlador lógica
-	private static Controlador cont;
+	private static Dao dao;
 
-	public static void main(String[] args) {
-		try {
-			Register dialog = new Register(cont);
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public Register(Controlador cont) {
-		Register.cont = cont;
+	public Register(Dao dao) {
+		this.dao = dao;
 
 		getContentPane().setFont(new Font("Dialog", Font.BOLD, 12));
 		getContentPane().setBackground(new Color(255, 255, 255));
@@ -274,7 +264,7 @@ public class Register extends JDialog implements ActionListener {
 
 		}
 
-		Controlador.registrarUsuario(persona);
+		dao.registrarUsuario(persona);
 	}
 
 	private void cargarDatosComunes(Persona persona) {
