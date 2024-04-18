@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controller.Controlador;
+import controller.Dao;
 
 import java.awt.Color;
 import javax.swing.JButton;
@@ -30,31 +30,14 @@ public class Hamburger extends JFrame {
 	private JPanel panel;
 	private JPanel panel2;
 	
-	// Controlador
-	private Controlador cont;
+	// Interfaz
+	private Dao dao;
 	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Hamburger frame = new Hamburger();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
 	public Hamburger () {
 		Hamburguesa(false);
 	}
+	
 	public Hamburger (boolean oscuro) {
 		Hamburguesa(oscuro);
 	}
@@ -139,7 +122,7 @@ public class Hamburger extends JFrame {
     }
 
 	protected void logout() {
-		Login log = new Login(cont);
+		Login log = new Login(dao);
 		log.setVisible(true);
 		setVisible(false);
 	}
@@ -164,7 +147,7 @@ public class Hamburger extends JFrame {
 	}
 	
 	protected void inicio() {
-		Main index = new Main();
+		Main index = new Main(dao);
 		index.setVisible(true);
 		setVisible(false);
 	}
