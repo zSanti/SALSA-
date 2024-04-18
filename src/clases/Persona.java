@@ -3,7 +3,7 @@ package clases;
 import java.time.LocalDate;
 
 public class Persona {
-	private String dni, nombre, apellido, email, direccion, contraseña;
+	private String dni, nombre, apellido, email, direccion, contrasena, rol;
 	private LocalDate fechaNacimiento;
 	private Sexo genero;
 
@@ -50,11 +50,16 @@ public class Persona {
 	public void setGenero(Sexo genero) {
 		this.genero = genero;
 	}
-	public String getContraseña() {
-		return contraseña;
+	public String getContrasena() {
+		return contrasena;
 	}
-	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña;
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
 	}
-	
+	public String getRol() {
+		return rol;
+	}
+	public void setRol(String rol) {
+		this.rol = rol;
+	}
 }
