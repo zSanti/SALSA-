@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controller.Controlador;
+import controller.Dao;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -23,13 +23,11 @@ public class Main extends JFrame {
     private JLabel logo;
     private JButton btnCamisetas, btnSudaderas, btnPantalones, btnIniciarSesion;
 
-    // 
-    private Controlador cont;
+    // Interfaz
+    private Dao dao;
     
-    /**
-     * Create the frame.
-     */
-    public Main() {
+    public Main(Dao dao) {
+    	this.dao = dao;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1082, 836);
         BodyLayout = new JPanel();
@@ -89,9 +87,8 @@ public class Main extends JFrame {
         btnIniciarSesion.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Crear una instancia de la vista Login
-                Login login = new Login(cont);
+                Login login = new Login(dao);
                 login.setVisible(true);
-                // Ocultar la vista actual (Hamburger)
                 setVisible(false);
             }
         });
