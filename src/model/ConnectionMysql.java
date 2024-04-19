@@ -14,7 +14,7 @@ public class ConnectionMysql {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
     private static final Integer PORT = 3306;
-    private static final String DATABASE = "salsa";
+    private static final String DATABASE = "";
 
     // Abrir la conexion de la base de datos
     public Connection openConnection() {

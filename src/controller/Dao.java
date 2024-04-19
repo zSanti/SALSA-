@@ -1,12 +1,11 @@
 package controller;
 
+import java.time.LocalDate;
+
 import clases.Persona;
 
 public interface Dao {
-	
-	// Comprobacion de inicio de sesion
-	void iniciarSesion(Persona per);
-	
-	boolean registrarUsuario(Persona per);
+	boolean iniciarSesion(String nombreUsuario, String contraseña);
 
+	boolean registrarUsuario(Persona per);
 }

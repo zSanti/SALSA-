@@ -1,15 +1,19 @@
 package controller;
 
 import clases.Persona;
-import model.ImpleDB;
+import model.ImpleBD;
 
 public class Controlador {
-	
-	// creo puedo borrar esto :v
+	private Dao dao = new ImpleBD();
 
-	public static boolean registrarUsuario(Persona per) {
-		Dao dao = new ImpleDB();
+	public boolean iniciarSesion(String nombreUsuario, String contrasena) {
+		return false;
+	}
+
+	public boolean registrarUsuario(Persona per) {
+
 		return dao.registrarUsuario(per);
+
 	}
 
 }

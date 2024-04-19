@@ -1,13 +1,13 @@
 package controller;
 
-import view.Login;
+import view.Main;
 
 public class Principal {
 	
 	public static void main(String[] args) {
-		Dao dao = null;
+		boolean oscuro = false;
 		// Llamamos a la ventana principal desde la vista
-        Login ventanaPrincipal = new Login(dao);
+        Main ventanaPrincipal = new Main(oscuro);
         
         // Hacemos visible la ventana principal
         ventanaPrincipal.setVisible(true);

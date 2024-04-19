@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,8 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import clases.Persona;
-import controller.Dao;
+import controller.Controlador;
 
 import java.awt.Color;
 import javax.swing.JTextField;
@@ -22,24 +22,30 @@ import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 
-public class Login extends JFrame implements ActionListener {
+public class Login extends JFrame {
 
+	/**
+	 * 
+	 */
     private static final long serialVersionUID = 1L;
-    private JPanel BodyLayout;
-    private JLabel logo, labelEmail, labelPassword, labelNoRegister, linkRegister;
+    private JPanel BodyLayout, panelLeft, panelRight;
+    private JLabel logo, labelEmail, labelPassword, labelNoRegister;
     private JTextField inputEmail;
     private JPasswordField inputPassword;
-    private JButton toggleButton, btnLogin;
-    
-    // 
-    private Dao dao;
+    private JButton toggleButton;
+    private Controlador cont;
 
 	/**
 	 * Create the frame.
 	 */
-	public Login(Dao dao) {
-		this.dao = dao;
-		
+    
+	public Login() {
+		InicioSesion(false);
+	}
+	public Login(boolean oscuro) {
+		InicioSesion(oscuro);
+	}
+	public void InicioSesion(boolean oscuro) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 931, 574);
         BodyLayout = new JPanel();
@@ -50,13 +56,13 @@ public class Login extends JFrame implements ActionListener {
         ImageIcon icon = new ImageIcon(getClass().getResource("/assets/logo.png"));
         
         // Division Login
-        JPanel panelLeft = new JPanel();
+        panelLeft = new JPanel();
         panelLeft.setBackground(new Color(0, 128, 255));
         panelLeft.setBounds(0, 0, 416, 539);
         BodyLayout.add(panelLeft);
         panelLeft.setLayout(null);
 
-        JPanel panelRight = new JPanel();
+        panelRight = new JPanel();
         panelRight.setBackground(new Color(255, 255, 255));
         panelRight.setBounds(414, 0, 501, 539);
         BodyLayout.add(panelRight);
@@ -64,7 +70,11 @@ public class Login extends JFrame implements ActionListener {
         
         toggleButton = new JButton(new ImageIcon(getClass().getResource("/assets/icons/nover.png"))); // Establece el icono "nover" por defecto
         toggleButton.setBounds(412, 313, 29, 20);
-        toggleButton.addActionListener(this);
+        toggleButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                togglePasswordVisibility();
+            }
+        });
         toggleButton.setOpaque(false); // Establece el botón como transparente
         toggleButton.setContentAreaFilled(false); // No rellena el área del botón
         toggleButton.setBorderPainted(false);
@@ -94,81 +104,71 @@ public class Login extends JFrame implements ActionListener {
         inputPassword.setBounds(74, 295, 378, 51);
         panelRight.add(inputPassword);
 
-        btnLogin = new JButton("Iniciar sesión");
+        JButton btnLogin = new JButton("Iniciar sesión");
         btnLogin.setBounds(74, 381, 378, 45);
-        btnLogin.addActionListener(this);
         panelRight.add(btnLogin);
+	        
+		// Agregar ActionListener al botón btnIniciarSesion
+        btnLogin.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        // Obtener los datos ingresados por el usuario
+		        String email = inputEmail.getText();
+		        char[] contrasenaChars = inputPassword.getPassword(); // Obtener la contraseña como un array de caracteres
+		        String contrasena = new String(contrasenaChars); // Convertir el array de caracteres en un String
+		
+		        // Llamar al método iniciarSesion del controlador
+		        Controlador controlador = new Controlador();
+		        boolean sesionIniciada = controlador.iniciarSesion(email, contrasena);
+		
+		        // Verificar si la sesión se inició correctamente
+		        if (sesionIniciada) {
+		            System.out.println("Sesión iniciada correctamente");
+		            dispose();
+		            Main ventanaPrincipal = new Main(oscuro);
+		            ventanaPrincipal.setVisible(true);
+		        } else {
+		            System.out.println("Error: Nombre de usuario o contraseña incorrectos");
+		        }
+		    }
+		});
         
         labelNoRegister = new JLabel("¿No tienes cuenta? Click aquí para");
-        labelNoRegister.setBounds(74, 454, 227, 14);
-        labelNoRegister.setHorizontalAlignment(SwingConstants.LEFT);
+        labelNoRegister.setBounds(59, 454, 209, 14);
+        labelNoRegister.setHorizontalAlignment(SwingConstants.CENTER);
         panelRight.add(labelNoRegister);
-        
-        linkRegister = new JLabel("registrarme");
-        linkRegister.setBounds(274, 454, 75, 14);
+        JLabel linkRegister = new JLabel("registrarme");
+        linkRegister.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) { // Clic en la palabra remarcada y muestra ventana de registro
+        		Register registro = new Register(oscuro);
+        		registro.setVisible(true);
+        		setVisible(false);
+        		
+        	}
+        });
+        linkRegister.setBounds(267, 454, 75, 14);
         linkRegister.setFont(new Font("Tahoma", Font.BOLD, 11));
         linkRegister.setForeground(new Color(0, 128, 255));
         linkRegister.setHorizontalAlignment(SwingConstants.LEFT);
-        linkRegister.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // Crear una instancia de la vista Login
-                Register registro = new Register(dao);
-                registro.setVisible(true);
-                setVisible(false);
-            }
-        });
         panelRight.add(linkRegister);
+        
+        
+        if (oscuro) {
+        	cambioFondo();
+        }
         
     }
 	
-	// Método para ahorrar los action listener
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(toggleButton)) {
-			 togglePasswordVisibility();
-		}
-		if (e.getSource().equals(btnLogin)) {
-			conectarseUsuario();
-		}
+	private void cambioFondo() {
+		panelRight.setBackground(Color.DARK_GRAY);
+		labelEmail.setForeground(Color.WHITE);
+		labelPassword.setForeground(Color.WHITE);
+		labelNoRegister.setForeground(Color.WHITE);
 	}
-	
-	// Metodo para que el usuario se conecte y inicie sesion
-	private void conectarseUsuario() {
-		// Creamos un nuevo objeto usuario
-		Persona persona = new Persona();
-		persona.setEmail(inputEmail.getText().toLowerCase().trim());
-		persona.setContrasena(String.valueOf(inputPassword.getPassword()).trim());
-		
-		// Comprobamos a traves de la interfaz si la cuenta existe
-		dao.iniciarSesion(persona);
-		
-		// Si el usuario tiene un rol le mostramos la ventana, si no le mostramos que no existe
-//		if (persona.getRol() != null) {
-//			Main ventanaPrincipal = new Main(true, this, dao, persona);
-//			ventanaPrincipal.setLocationRelativeTo(this);
-//			ventanaPrincipal.setVisible(true);
-//		} else {
-//			JOptionPane.showMessageDialog(this, "Usuario o Contraseña incorrecta.", "ERROR", JOptionPane.ERROR_MESSAGE);
-//		}
-		borrar();
-		
-	}
-	
-	// Borramos los datos tecleados del formulario
-	private void borrar() {
-		inputEmail.setText("");
-		inputEmail.requestFocus();
-		inputPassword.setText("");
-	}
-	
-	// Visualizar/Desvisualizar la contraseña
 	private void togglePasswordVisibility() {
-		// Si el echoChar es '•', cambiar a mostrar texto, de lo contrario, ocultar texto
-	    char echoChar = (inputPassword.getEchoChar() == '\u2022') ? '\u0000' : '\u2022';
-	    // Establecer el echoChar según la lógica anterior
+	    char echoChar = (inputPassword.getEchoChar() == '\u2022') ? '\u0000' : '\u2022'; // Si el echoChar es '•', cambiar a mostrar texto, de lo contrario, ocultar texto
 	    inputPassword.setEchoChar(echoChar);
-	    // Cambiar el icono según el echoChar
-	    toggleButton.setIcon((echoChar == '\u2022') ? new ImageIcon(getClass().getResource("/assets/icons/ver.png")) : new ImageIcon(getClass().getResource("/assets/icons/nover.png")));
+	    toggleButton.setIcon((echoChar == '\u2022') ? new ImageIcon(getClass().getResource("/assets/icons/ver.png")) : new ImageIcon(getClass().getResource("/assets/icons/nover.png"))); // Cambiar el icono según el echoChar
 	}
 
 }
