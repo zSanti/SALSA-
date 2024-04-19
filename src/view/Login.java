@@ -24,9 +24,6 @@ import java.awt.Font;
 
 public class Login extends JFrame implements ActionListener {
 
-	/**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
     private JPanel BodyLayout;
     private JLabel logo, labelEmail, labelPassword, labelNoRegister, linkRegister;
@@ -51,8 +48,6 @@ public class Login extends JFrame implements ActionListener {
         setContentPane(BodyLayout);
         BodyLayout.setLayout(null);
         ImageIcon icon = new ImageIcon(getClass().getResource("/assets/logo.png"));
-        
-        
         
         // Division Login
         JPanel panelLeft = new JPanel();
@@ -145,7 +140,7 @@ public class Login extends JFrame implements ActionListener {
 		persona.setContrasena(String.valueOf(inputPassword.getPassword()).trim());
 		
 		// Comprobamos a traves de la interfaz si la cuenta existe
-		dao.comprobarUsuario(persona);
+		dao.iniciarSesion(persona);
 		
 		// Si el usuario tiene un rol le mostramos la ventana, si no le mostramos que no existe
 //		if (persona.getRol() != null) {
