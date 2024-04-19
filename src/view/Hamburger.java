@@ -1,7 +1,5 @@
 package view;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -12,27 +10,17 @@ import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.lang.ModuleLayer.Controller;
 import java.awt.event.ActionEvent;
 
-public class Hamburger extends JFrame {
+public class Hamburger extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JButton btnIndex;
-	private JButton btnSettings;
-	private JButton btnContact;
-	private JButton btnAdministration;
-	private JButton btnLogout;
-	private JPanel panel;
-	private JPanel panel2;
+	private JButton btnIndex, btnSettings, btnContact, btnAdministration, btnLogout;
+	private JPanel panel, panel2;
 	
 	// Interfaz
 	private Dao dao;
-	
 
 	public Hamburger () {
 		Hamburguesa(false);
@@ -62,11 +50,7 @@ public class Hamburger extends JFrame {
 		contentPane.add(panel2);
 		
         btnIndex = createButton("Inicio");
-        btnIndex.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		inicio();
-        	}
-        });
+        btnIndex.addActionListener(this);
         btnIndex.setBounds(254, 183, 176, 42);
         contentPane.add(btnIndex);
 
@@ -80,31 +64,23 @@ public class Hamburger extends JFrame {
         contentPane.add(btnSettings);
 
         btnContact = createButton("Contacto");
-        btnContact.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		contacto();
-        	}
-        });
+        btnContact.addActionListener(this);
         btnContact.setBounds(254, 309, 176, 42);
         contentPane.add(btnContact);
 
-        btnAdministration = createButton("Administración");
-        btnAdministration.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		administracion();
-        	}
-        });
-        btnAdministration.setBounds(240, 373, 202, 42);
-        contentPane.add(btnAdministration);
+        // Si el usuario tiene dicho rol se le mostrará la opción
+        //if (rol.equals("ADMINISTRADOR")) {
+	        btnAdministration = createButton("Administración");
+	        btnAdministration.addActionListener(this);
+	        btnAdministration.setBounds(240, 373, 202, 42);
+	        contentPane.add(btnAdministration);
+        //}
 
         btnLogout = createButton("Cerrar sesión");
-        btnLogout.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		logout();
-        	}
-        });
+        btnLogout.addActionListener(this);
         btnLogout.setBounds(254, 437, 176, 42);
         contentPane.add(btnLogout);
+        
         if (oscuro) {
         	cambioFondo();	
         }
@@ -121,6 +97,22 @@ public class Hamburger extends JFrame {
         return btn;
     }
 
+	// Método para ahorrar los action listener
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(btnIndex)) {
+			inicio();
+		}
+		if (e.getSource().equals(btnAdministration)) {
+			administracion();
+		}
+		if (e.getSource().equals(btnLogout)) {
+			logout();
+		}
+		if (e.getSource().equals(btnContact)) {
+			contacto();
+		}
+	}
+	
 	protected void logout() {
 		Login log = new Login(dao);
 		log.setVisible(true);
@@ -152,6 +144,7 @@ public class Hamburger extends JFrame {
 		setVisible(false);
 	}
 	
+	// Cambio de fondo para el modo diurno/nocturno
 	private void cambioFondo() {
 			panel.setBackground(Color.WHITE);
 			panel2.setBackground(Color.WHITE);
