@@ -46,7 +46,6 @@ public class Register extends JDialog implements ActionListener {
 		getContentPane().setFont(new Font("Dialog", Font.BOLD, 12));
 		getContentPane().setBackground(new Color(255, 255, 255));
 		setFont(new Font("Dialog", Font.PLAIN, 12));
-		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		getContentPane().setLayout(null);
 
 		textNombre = new JTextField();
