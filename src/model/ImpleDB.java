@@ -8,7 +8,6 @@ import java.time.LocalDate;
 
 import clases.Persona;
 import controller.Dao;
-import view.Main;
 
 public class ImpleDB implements Dao {
     
@@ -17,12 +16,14 @@ public class ImpleDB implements Dao {
 	
 	// Consultas a la Base de Datos
 	private final String CONSULTA_COMPROBAR_USUARIO = "SELECT dni, nombre, apellido, rol FROM persona WHERE email = ? AND contrasena = ?";
-	private final String CONSULTA_PERSONA = "INSERT INTO persona (dni, nombre, apellido, fechaNac, contrasena, direccion, email, genero) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+	private final String CONSULTA_PERSONA = "INSERT INTO persona (dni, nombre, apellido, fechaNac, contrasena, direccion, email, genero, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String CONSULTA_TRABAJADOR = "INSERT INTO trabajador (dni) VALUES (?)";
 	private final String CONSULTA_USUARIO = "INSERT INTO usuario (dni, fechaReg) VALUES (?, ?)";
      
 	@Override
 	public void iniciarSesion(Persona per) {
+		String nombre, apellido, rol;
+		
 	    try {
 	        conexion.openConnection();
 	        try (PreparedStatement stmtUsuario = ((Connection) conexion).prepareStatement(CONSULTA_COMPROBAR_USUARIO)) {
@@ -30,10 +31,9 @@ public class ImpleDB implements Dao {
 	            stmtUsuario.setString(2, per.getContrasena());
 	            try (ResultSet resultSet = stmtUsuario.executeQuery()) {
 	                if (resultSet.next()) {
-	                    String dni = resultSet.getString("dni");
-	                    String nombre = resultSet.getString("nombre");
-	                    String apellido = resultSet.getString("apellido");
-	                    String rol = resultSet.getString("rol");
+	                    nombre = resultSet.getString("nombre");
+	                    apellido = resultSet.getString("apellido");
+	                    rol = resultSet.getString("rol");
 
 	                    System.out.println("Bienvenido, " + nombre + " " + apellido + ". Rol: " + rol);
 
@@ -44,7 +44,7 @@ public class ImpleDB implements Dao {
 	                        // Redirigir al panel de usuario normal
 	                    }
 	                } else {
-	                    System.out.println("Credenciales inválidas. Por favor, inténtalo de nuevo.");
+	                    System.out.println("Email/Contraseña inválidas. Por favor, inténtalo de nuevo.");
 	                }
 	            }
 	        }
@@ -100,6 +100,7 @@ public class ImpleDB implements Dao {
             stmtPersona.setString(6, per.getDireccion());
             stmtPersona.setString(7, per.getEmail());
             stmtPersona.setString(8, per.getGenero().toString());
+            stmtPersona.setString(9, per.getRol());
             stmtPersona.executeUpdate();
 
             // Inserción en la tabla trabajador (simplemente inserta el DNI)
@@ -109,8 +110,7 @@ public class ImpleDB implements Dao {
 
             // Inserción en la tabla usuario (simplemente inserta el DNI y la fecha de registro)
             stmtUsuario = ((Connection) conexion).prepareStatement(CONSULTA_USUARIO);
-            stmtUsuario.setString(1, per.getDni());
-            stmtUsuario.setDate(2, java.sql.Date.valueOf(LocalDate.now())); // Fecha de registro actual
+            stmtUsuario.setDate(1, java.sql.Date.valueOf(LocalDate.now())); // Fecha de registro actual
             stmtUsuario.executeUpdate();
 
             // Si todas las inserciones fueron exitosas, retorna true
