@@ -28,15 +28,17 @@ import controller.Dao;
 public class Register extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField textNombre, textEmail, textContraseña, textDni, textApellido, tFEmailConfirmado, tFContraeñaConfirmada, textDireccion, textNumeroSS;
-	private JLabel lblNombre, lblEmail, lblContrasena, lblDni, lblSexo,lblPrimerApellido,lblConfirmarEmail, lblConfirmeLaContrasea,
-	lblDireccion, lblNewLabel, lblDireccion_1, lblSexo_1, lblCamposObligatorios, Seleccione, lblFechaDeRegistro, lblNmeroSeguridadSocial;
+	private JTextField textNombre, textEmail, textContraseña, textDni, textApellido, tFEmailConfirmado,
+			tFContraeñaConfirmada, textDireccion, textNumeroSS;
+	private JLabel lblNombre, lblEmail, lblContrasena, lblDni, lblSexo, lblPrimerApellido, lblConfirmarEmail,
+			lblConfirmeLaContrasea, lblDireccion, lblNewLabel, lblDireccion_1, lblSexo_1, lblCamposObligatorios,
+			Seleccione, lblFechaDeRegistro, lblNmeroSeguridadSocial;
 	private ButtonGroup generoGrupo = new ButtonGroup();
 	private JCheckBox checkBoxUsuario, checkBoxTrabajador;
 	private JButton btnRegistro;
 	private JDateChooser dateFRegistro, dateFechaNacimiento;
 	private JRadioButton rBFemenino, rBMasculino, rBOtros;
-	
+
 	// Controlador lógica
 	private static Dao dao;
 
@@ -122,7 +124,7 @@ public class Register extends JDialog implements ActionListener {
 		tFEmailConfirmado.setColumns(10);
 		tFEmailConfirmado.setBounds(407, 191, 237, 29);
 		getContentPane().add(tFEmailConfirmado);
-		
+
 		lblConfirmarEmail = new JLabel("Confirmar Email *");
 		lblConfirmarEmail.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblConfirmarEmail.setBounds(407, 166, 138, 14);
@@ -132,7 +134,7 @@ public class Register extends JDialog implements ActionListener {
 		tFContraeñaConfirmada.setColumns(10);
 		tFContraeñaConfirmada.setBounds(407, 256, 237, 29);
 		getContentPane().add(tFContraeñaConfirmada);
-		
+
 		lblConfirmeLaContrasea = new JLabel("Confirma la contraseña*");
 		lblConfirmeLaContrasea.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblConfirmeLaContrasea.setBounds(407, 231, 147, 14);
@@ -149,8 +151,7 @@ public class Register extends JDialog implements ActionListener {
 		getContentPane().add(lblDireccion);
 
 		lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(
-		new ImageIcon(getClass().getResource("/assets/logo.png")));
+		lblNewLabel.setIcon(new ImageIcon(getClass().getResource("/assets/logo.png")));
 		lblNewLabel.setBounds(235, 11, 278, 62);
 		getContentPane().add(lblNewLabel);
 
@@ -177,6 +178,7 @@ public class Register extends JDialog implements ActionListener {
 
 		dateFechaNacimiento = new JDateChooser();
 		dateFechaNacimiento.getCalendarButton().addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
@@ -190,6 +192,7 @@ public class Register extends JDialog implements ActionListener {
 
 		checkBoxUsuario = new JCheckBox("Usuario");
 		checkBoxUsuario.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				seleccionarUsuario();
 			}
@@ -206,11 +209,11 @@ public class Register extends JDialog implements ActionListener {
 		checkBoxTrabajador.setBounds(162, 507, 99, 23);
 		getContentPane().add(checkBoxTrabajador);
 
-		 Seleccione = new JLabel("Seleccione");
+		Seleccione = new JLabel("Seleccione");
 		Seleccione.setFont(new Font("Tahoma", Font.BOLD, 11));
 		Seleccione.setBounds(64, 467, 131, 14);
 		getContentPane().add(Seleccione);
-		
+
 		lblFechaDeRegistro = new JLabel("Fecha de registro ");
 		lblFechaDeRegistro.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblFechaDeRegistro.setBounds(407, 507, 147, 14);
@@ -224,12 +227,12 @@ public class Register extends JDialog implements ActionListener {
 		textNumeroSS.setColumns(10);
 		textNumeroSS.setBounds(403, 442, 237, 29);
 		getContentPane().add(textNumeroSS);
-		
+
 		lblNmeroSeguridadSocial = new JLabel("Número Seguridad Social *");
 		lblNmeroSeguridadSocial.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblNmeroSeguridadSocial.setBounds(407, 420, 214, 14);
 		getContentPane().add(lblNmeroSeguridadSocial);
-		
+
 		// Establecer por defecto el tamaño a la ventana
 		setSize(732, 748);
 	}
@@ -252,7 +255,8 @@ public class Register extends JDialog implements ActionListener {
 			persona = new Usuario();
 			cargarDatosComunes(persona);
 
-			((Usuario) persona).setFechaRegistro(dateFRegistro.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			((Usuario) persona)
+					.setFechaRegistro(dateFRegistro.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 			textNumeroSS.setEnabled(false);
 
 		} else if (checkBoxTrabajador.isSelected()) {
@@ -267,24 +271,27 @@ public class Register extends JDialog implements ActionListener {
 	}
 
 	private void cargarDatosComunes(Persona persona) {
-		@SuppressWarnings("unused")
+
 		Sexo sexo;
 		persona.setApellido(textApellido.getText());
 		persona.setNombre(textNombre.getText());
 		persona.setDni(textDni.getText());
 		persona.setEmail(textEmail.getText());
-		persona.setFechaNacimiento(dateFechaNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		persona.setFechaNacimiento(
+				dateFechaNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		persona.setDireccion(textDireccion.getText());
 
 		// Lo que hace es pasar esto a una lista todos los radio buttons
 		Enumeration<AbstractButton> radios = generoGrupo.getElements();
-		
+
 		// Luego lo que haremos es recorrer todos los elementos de esta lista
 		while (radios.hasMoreElements()) {
-			// Obtiene el próximo elemento de laenumeración y lo asignamos a una variable radio
+			// Obtiene el próximo elemento de laenumeración y lo asignamos a una variable
+			// radio
 			JRadioButton radio = (JRadioButton) radios.nextElement();
-		
-			// Si coincide que el botón de radio esta seleccionado, agregamos su texto(que representa el sexo) al área de texto
+
+			// Si coincide que el botón de radio esta seleccionado, agregamos su texto(que
+			// representa el sexo) al área de texto
 			if (radio.isSelected()) {
 				String textRadio = radio.getText();
 				sexo = Sexo.valueOf(textRadio);

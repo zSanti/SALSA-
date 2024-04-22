@@ -2,7 +2,9 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.util.Enumeration;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,17 +15,16 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import clases.Articulo;
+import clases.Temporada;
+
 public class InsertDatosArticulo extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
+	private JTextField tfModelo, tfNombre, tfPrecio, tfStock, tfColor, tfCodArticulo;
 	private final ButtonGroup btnTemporadaGroup = new ButtonGroup();
+	private JTextField tfPorcentaje;
 
 	/**
 	 * Create the dialog.
@@ -50,15 +51,15 @@ public class InsertDatosArticulo extends JDialog {
 		lblColor.setFont(new Font("Dialog", Font.BOLD, 14));
 		contentPanel.add(lblColor);
 
-		textField = new JTextField();
-		textField.setBounds(103, 163, 155, 35);
-		contentPanel.add(textField);
-		textField.setColumns(10);
+		tfCodArticulo = new JTextField();
+		tfCodArticulo.setBounds(103, 163, 155, 35);
+		contentPanel.add(tfCodArticulo);
+		tfCodArticulo.setColumns(10);
 
-		textField_1 = new JTextField();
-		textField_1.setBounds(537, 163, 225, 35);
-		textField_1.setColumns(10);
-		contentPanel.add(textField_1);
+		tfColor = new JTextField();
+		tfColor.setBounds(537, 163, 225, 35);
+		tfColor.setColumns(10);
+		contentPanel.add(tfColor);
 
 		JLabel lblTemporada = new JLabel("Temporada");
 		lblTemporada.setBounds(103, 208, 84, 35);
@@ -70,15 +71,15 @@ public class InsertDatosArticulo extends JDialog {
 		lblModelo.setFont(new Font("Dialog", Font.BOLD, 14));
 		contentPanel.add(lblModelo);
 
-		textField_2 = new JTextField();
-		textField_2.setBounds(537, 253, 225, 35);
-		textField_2.setColumns(10);
-		contentPanel.add(textField_2);
+		tfModelo = new JTextField();
+		tfModelo.setBounds(537, 253, 225, 35);
+		tfModelo.setColumns(10);
+		contentPanel.add(tfModelo);
 
-		textField_3 = new JTextField();
-		textField_3.setBounds(537, 352, 225, 35);
-		textField_3.setColumns(10);
-		contentPanel.add(textField_3);
+		tfNombre = new JTextField();
+		tfNombre.setBounds(537, 352, 225, 35);
+		tfNombre.setColumns(10);
+		contentPanel.add(tfNombre);
 
 		JLabel lblNombre = new JLabel("Nombre");
 		lblNombre.setBounds(537, 316, 84, 35);
@@ -119,19 +120,60 @@ public class InsertDatosArticulo extends JDialog {
 		lblStock.setFont(new Font("Dialog", Font.BOLD, 14));
 		contentPanel.add(lblStock);
 
-		textField_4 = new JTextField();
-		textField_4.setBounds(169, 409, 225, 35);
-		textField_4.setColumns(10);
-		contentPanel.add(textField_4);
+		tfPrecio = new JTextField();
+		tfPrecio.setBounds(169, 409, 225, 35);
+		tfPrecio.setColumns(10);
+		contentPanel.add(tfPrecio);
 
-		textField_5 = new JTextField();
-		textField_5.setBounds(598, 410, 142, 35);
-		textField_5.setColumns(10);
-		contentPanel.add(textField_5);
+		tfStock = new JTextField();
+		tfStock.setBounds(598, 410, 142, 35);
+		tfStock.setColumns(10);
+		contentPanel.add(tfStock);
 
 		JButton btnSubirDatos = new JButton("Subir Datos");
-		btnSubirDatos.setBounds(274, 519, 359, 60);
+		btnSubirDatos.setBounds(262, 564, 359, 60);
 		btnSubirDatos.setFont(new Font("Dialog", Font.BOLD, 18));
 		contentPanel.add(btnSubirDatos);
+
+		JLabel lblPorcentaje = new JLabel("Porcentaje de descuento");
+		lblPorcentaje.setFont(new Font("Dialog", Font.BOLD, 14));
+		lblPorcentaje.setBounds(198, 474, 196, 35);
+		contentPanel.add(lblPorcentaje);
+
+		tfPorcentaje = new JTextField();
+		tfPorcentaje.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		tfPorcentaje.setColumns(10);
+		tfPorcentaje.setBounds(418, 476, 225, 35);
+		contentPanel.add(tfPorcentaje);
+	}
+
+	public void cargarDatosArticulo(Articulo articulo) {
+		Temporada temp;
+		// guardamos el texto de tf en una variable
+		String cod = tfCodArticulo.getText();
+		// luego parseamos dicha variable
+		int codigoArt = Integer.parseInt(cod);
+		// y la ponemos para cargar los datos
+		articulo.setCodArticulo(codigoArt);
+		articulo.setColor(tfColor.getText());
+		String porcentaje = tfPorcentaje.getText();
+		float porcent = Float.parseFloat(porcentaje);
+		articulo.setPorcentajeDecuento(porcent);
+		String precio = tfPrecio.getText();
+		int precio2 = Integer.parseInt(precio);
+		articulo.setPrecio(precio2);
+		Enumeration<AbstractButton> botonesTemporada = btnTemporadaGroup.getElements();
+		while (botonesTemporada.hasMoreElements()) {
+
+			JRadioButton btnTempo = (JRadioButton) botonesTemporada.nextElement();
+
+			if (btnTempo.isSelected()) {
+				String texTemporada = btnTempo.getText();
+
+				temp = Temporada.valueOf(texTemporada);
+			}
+
+		}
+
 	}
 }
