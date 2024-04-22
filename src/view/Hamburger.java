@@ -6,22 +6,32 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controller.Controlador;
 import controller.Dao;
 
-public class Hamburger extends JDialog implements ActionListener {
+public class Hamburger extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JButton btnIndex, btnSettings, btnContact, btnAdministration, btnLogout;
-	private JPanel panel, panel2;
+	private JButton btnIndex;
+	private JButton btnSettings;
+	private JButton btnContact;
+	private JButton btnAdministration;
+	private JButton btnLogout;
+	private JPanel panel;
+	private JPanel panel2;
 
-	// Interfaz
+	// Controlador
+	private Controlador cont;
 	private Dao dao;
 
+	/**
+	 * Create the frame.
+	 */
 	public Hamburger() {
 		Hamburguesa(false);
 	}
@@ -31,7 +41,7 @@ public class Hamburger extends JDialog implements ActionListener {
 	}
 
 	public void Hamburguesa(boolean oscuro) {
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 709);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -50,7 +60,12 @@ public class Hamburger extends JDialog implements ActionListener {
 		contentPane.add(panel2);
 
 		btnIndex = createButton("Inicio");
-		btnIndex.addActionListener(this);
+		btnIndex.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				inicio(oscuro);
+			}
+		});
 		btnIndex.setBounds(254, 183, 176, 42);
 		contentPane.add(btnIndex);
 
@@ -65,23 +80,34 @@ public class Hamburger extends JDialog implements ActionListener {
 		contentPane.add(btnSettings);
 
 		btnContact = createButton("Contacto");
-		btnContact.addActionListener(this);
+		btnContact.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				contacto();
+			}
+		});
 		btnContact.setBounds(254, 309, 176, 42);
 		contentPane.add(btnContact);
 
-		// Si el usuario tiene dicho rol se le mostrará la opción
-		// if (rol.equals("ADMINISTRADOR")) {
 		btnAdministration = createButton("Administración");
-		btnAdministration.addActionListener(this);
+		btnAdministration.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				administracion(oscuro);
+			}
+		});
 		btnAdministration.setBounds(240, 373, 202, 42);
 		contentPane.add(btnAdministration);
-		// }
 
 		btnLogout = createButton("Cerrar sesión");
-		btnLogout.addActionListener(this);
+		btnLogout.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				logout(oscuro);
+			}
+		});
 		btnLogout.setBounds(254, 437, 176, 42);
 		contentPane.add(btnLogout);
-
 		if (oscuro) {
 			cambioFondo();
 		}
@@ -98,31 +124,14 @@ public class Hamburger extends JDialog implements ActionListener {
 		return btn;
 	}
 
-	// Método para ahorrar los action listener
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(btnIndex)) {
-			inicio();
-		}
-		if (e.getSource().equals(btnAdministration)) {
-			administracion();
-		}
-		if (e.getSource().equals(btnLogout)) {
-			logout();
-		}
-		if (e.getSource().equals(btnContact)) {
-			contacto();
-		}
-	}
-
-	protected void logout() {
-		Login log = new Login(dao);
+	protected void logout(boolean oscuro) {
+		Login log = new Login(cont, oscuro);
 		log.setVisible(true);
 		setVisible(false);
 	}
 
-	protected void administracion() {
-		Administracion admin = new Administracion();
+	protected void administracion(boolean oscuro) {
+		Administracion admin = new Administracion(oscuro);
 		admin.setVisible(true);
 		setVisible(false);
 
@@ -140,13 +149,12 @@ public class Hamburger extends JDialog implements ActionListener {
 		setVisible(false);
 	}
 
-	protected void inicio() {
-		Main index = new Main(dao);
+	protected void inicio(boolean oscuro) {
+		Main index = new Main(oscuro, null, cont, null, oscuro);
 		index.setVisible(true);
 		setVisible(false);
 	}
 
-	// Cambio de fondo para el modo diurno/nocturno
 	private void cambioFondo() {
 		panel.setBackground(Color.WHITE);
 		panel2.setBackground(Color.WHITE);

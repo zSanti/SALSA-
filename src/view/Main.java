@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controller.Controlador;
 import controller.Dao;
 
 public class Main extends JDialog {
@@ -25,9 +26,10 @@ public class Main extends JDialog {
 	// Interfaz
 	private Dao dao;
 
-	public Main(Dao dao) {
+	public Main(boolean oscuro, Dao dao, Controlador cont, Register padre, boolean modal) {
+		super(padre);
+		setModal(modal);
 		this.dao = dao;
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1082, 836);
 		BodyLayout = new JPanel();
 		BodyLayout.setBackground(new Color(255, 255, 255));
@@ -85,17 +87,6 @@ public class Main extends JDialog {
 		btnIniciarSesion = new JButton("Iniciar sesión");
 		btnIniciarSesion.setBounds(10, 38, 113, 30);
 		BodyLayout.add(btnIniciarSesion);
-
-		// Agrego un evento al botón para enviar a la pagina de Login
-		btnIniciarSesion.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// Crear una instancia de la vista Login
-				Login login = new Login(dao);
-				login.setVisible(true);
-				setVisible(false);
-			}
-		});
 
 		// Agrega los elementos a la rejilla de artículos
 		for (int i = 0; i < 8; i++) { // Por ejemplo, aquí se agregan 8 elementos

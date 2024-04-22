@@ -1,9 +1,12 @@
 package view;
 
+import java.awt.CheckboxGroup;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.ZoneId;
 import java.util.Enumeration;
 
@@ -14,6 +17,8 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
@@ -23,28 +28,47 @@ import clases.Persona;
 import clases.Sexo;
 import clases.Trabajador;
 import clases.Usuario;
-import controller.Dao;
+import controller.Controlador;
 
 public class Register extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField textNombre, textEmail, textContraseña, textDni, textApellido, tFEmailConfirmado,
-			tFContraeñaConfirmada, textDireccion, textNumeroSS;
-	private JLabel lblNombre, lblEmail, lblContrasena, lblDni, lblSexo, lblPrimerApellido, lblConfirmarEmail,
-			lblConfirmeLaContrasea, lblDireccion, lblNewLabel, lblDireccion_1, lblSexo_1, lblCamposObligatorios,
-			Seleccione, lblFechaDeRegistro, lblNmeroSeguridadSocial;
+	private JTextField textNombre;
+	private JTextField textEmail;
+	private JTextField textDni;
+	private JTextField textApellido;
+	private JTextField tFEmailConfirmado;
+	private JTextField textDireccion;
 	private ButtonGroup generoGrupo = new ButtonGroup();
+	// private ButtonGroup perfilGrupo = new ButtonGroup();
+	// He modificado esto para poder probar
+	private CheckboxGroup perfilGrupo = new CheckboxGroup();
 	private JCheckBox checkBoxUsuario, checkBoxTrabajador;
+
+	private JTextField textNumeroSS;
 	private JButton btnRegistro;
-	private JDateChooser dateFRegistro, dateFechaNacimiento;
-	private JRadioButton rBFemenino, rBMasculino, rBOtros;
+	private JDateChooser dateFRegistro;
+	private JDateChooser dateFechaNacimiento;
+	private JRadioButton rBFemenino;
+	private JRadioButton rBMasculino;
+	private JRadioButton rBOtros;
+	private static Controlador cont;
+	private JLabel lblFechaDeRegistro;
+	private JLabel lblNmeroSeguridadSocial;
+	private JPasswordField passConfirmar;
+	private JPasswordField passContrasena;
 
-	// Controlador lógica
-	private static Dao dao;
-
-	public Register(Dao dao) {
-		this.dao = dao;
-
+	public Register(Controlador cont, Login padre, boolean modal) {
+		super(padre);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(WindowEvent e) {
+				padre.setVisible(true);
+			}
+		});
+		setModal(modal);
+		this.cont = cont;
+		setSize(729, 700);
 		getContentPane().setFont(new Font("Dialog", Font.BOLD, 12));
 		getContentPane().setBackground(new Color(255, 255, 255));
 		setFont(new Font("Dialog", Font.PLAIN, 12));
@@ -55,7 +79,7 @@ public class Register extends JDialog implements ActionListener {
 		getContentPane().add(textNombre);
 		textNombre.setColumns(10);
 
-		lblNombre = new JLabel("Nombre *");
+		JLabel lblNombre = new JLabel("Nombre *");
 		lblNombre.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblNombre.setBounds(64, 101, 78, 14);
 		getContentPane().add(lblNombre);
@@ -65,27 +89,22 @@ public class Register extends JDialog implements ActionListener {
 		textEmail.setBounds(64, 191, 237, 29);
 		getContentPane().add(textEmail);
 
-		lblEmail = new JLabel("Email *");
+		JLabel lblEmail = new JLabel("Email *");
 		lblEmail.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblEmail.setBounds(64, 166, 49, 14);
 		getContentPane().add(lblEmail);
 
-		lblContrasena = new JLabel("Contraseña*");
+		JLabel lblContrasena = new JLabel("Contraseña*");
 		lblContrasena.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblContrasena.setBounds(64, 231, 147, 14);
 		getContentPane().add(lblContrasena);
-
-		textContraseña = new JTextField();
-		textContraseña.setColumns(10);
-		textContraseña.setBounds(64, 256, 237, 29);
-		getContentPane().add(textContraseña);
 
 		textDni = new JTextField();
 		textDni.setColumns(10);
 		textDni.setBounds(64, 321, 237, 29);
 		getContentPane().add(textDni);
 
-		lblDni = new JLabel("DNI*");
+		JLabel lblDni = new JLabel("DNI*");
 		lblDni.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblDni.setBounds(64, 296, 147, 14);
 		getContentPane().add(lblDni);
@@ -102,55 +121,50 @@ public class Register extends JDialog implements ActionListener {
 		rBMasculino = new JRadioButton("Masculino");
 		generoGrupo.add(rBMasculino);
 		rBMasculino.setBackground(new Color(255, 255, 255));
-		rBMasculino.setBounds(177, 395, 111, 23);
+		rBMasculino.setBounds(190, 395, 111, 23);
 		getContentPane().add(rBMasculino);
 
-		lblSexo = new JLabel("Fecha de nacimiento ");
+		JLabel lblSexo = new JLabel("Fecha de nacimiento ");
 		lblSexo.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblSexo.setBounds(407, 361, 147, 14);
+		lblSexo.setBounds(456, 361, 147, 14);
 		getContentPane().add(lblSexo);
 
-		lblPrimerApellido = new JLabel("Primer apellido*");
+		JLabel lblPrimerApellido = new JLabel("Primer apellido*");
 		lblPrimerApellido.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblPrimerApellido.setBounds(407, 101, 131, 14);
+		lblPrimerApellido.setBounds(456, 101, 131, 14);
 		getContentPane().add(lblPrimerApellido);
 
 		textApellido = new JTextField();
 		textApellido.setColumns(10);
-		textApellido.setBounds(407, 126, 237, 29);
+		textApellido.setBounds(456, 126, 237, 29);
 		getContentPane().add(textApellido);
 
 		tFEmailConfirmado = new JTextField();
 		tFEmailConfirmado.setColumns(10);
-		tFEmailConfirmado.setBounds(407, 191, 237, 29);
+		tFEmailConfirmado.setBounds(456, 191, 237, 29);
 		getContentPane().add(tFEmailConfirmado);
 
-		lblConfirmarEmail = new JLabel("Confirmar Email *");
+		JLabel lblConfirmarEmail = new JLabel("Confirmar Email *");
 		lblConfirmarEmail.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblConfirmarEmail.setBounds(407, 166, 138, 14);
+		lblConfirmarEmail.setBounds(456, 166, 138, 14);
 		getContentPane().add(lblConfirmarEmail);
 
-		tFContraeñaConfirmada = new JTextField();
-		tFContraeñaConfirmada.setColumns(10);
-		tFContraeñaConfirmada.setBounds(407, 256, 237, 29);
-		getContentPane().add(tFContraeñaConfirmada);
-
-		lblConfirmeLaContrasea = new JLabel("Confirma la contraseña*");
+		JLabel lblConfirmeLaContrasea = new JLabel("Confirma la contraseña*");
 		lblConfirmeLaContrasea.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblConfirmeLaContrasea.setBounds(407, 231, 147, 14);
+		lblConfirmeLaContrasea.setBounds(456, 231, 147, 14);
 		getContentPane().add(lblConfirmeLaContrasea);
 
 		textDireccion = new JTextField();
 		textDireccion.setColumns(10);
-		textDireccion.setBounds(407, 321, 237, 29);
+		textDireccion.setBounds(456, 321, 237, 29);
 		getContentPane().add(textDireccion);
 
-		lblDireccion = new JLabel("Dirección *");
+		JLabel lblDireccion = new JLabel("Dirección *");
 		lblDireccion.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblDireccion.setBounds(407, 296, 147, 14);
+		lblDireccion.setBounds(456, 296, 147, 14);
 		getContentPane().add(lblDireccion);
 
-		lblNewLabel = new JLabel("");
+		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(getClass().getResource("/assets/logo.png")));
 		lblNewLabel.setBounds(235, 11, 278, 62);
 		getContentPane().add(lblNewLabel);
@@ -161,19 +175,20 @@ public class Register extends JDialog implements ActionListener {
 		rBOtros.setBounds(64, 421, 111, 23);
 		getContentPane().add(rBOtros);
 
-		lblDireccion_1 = new JLabel("");
+		JLabel lblDireccion_1 = new JLabel("");
 		lblDireccion_1.setBounds(321, 450, 147, 14);
 		getContentPane().add(lblDireccion_1);
 
-		lblSexo_1 = new JLabel("Sexo");
+		JLabel lblSexo_1 = new JLabel("Sexo");
 		lblSexo_1.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblSexo_1.setBounds(64, 374, 49, 14);
 		getContentPane().add(lblSexo_1);
 
 		btnRegistro = new JButton("Enviar los datos");
+		btnRegistro.setForeground(Color.WHITE);
 		btnRegistro.addActionListener(this);
 		btnRegistro.setBackground(new Color(0, 0, 255));
-		btnRegistro.setBounds(221, 629, 286, 38);
+		btnRegistro.setBounds(227, 575, 286, 38);
 		getContentPane().add(btnRegistro);
 
 		dateFechaNacimiento = new JDateChooser();
@@ -182,82 +197,154 @@ public class Register extends JDialog implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		dateFechaNacimiento.setBounds(407, 386, 165, 23);
+		dateFechaNacimiento.setBounds(456, 386, 165, 23);
 		getContentPane().add(dateFechaNacimiento);
 
-		lblCamposObligatorios = new JLabel("Campos obligatorios *");
+		JLabel lblCamposObligatorios = new JLabel("Campos obligatorios *");
 		lblCamposObligatorios.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblCamposObligatorios.setBounds(64, 604, 286, 14);
+		lblCamposObligatorios.setBounds(122, 550, 286, 14);
 		getContentPane().add(lblCamposObligatorios);
-
-		checkBoxUsuario = new JCheckBox("Usuario");
-		checkBoxUsuario.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				seleccionarUsuario();
-			}
-
-		});
+		// if (checkBoxUsuario.isSelected()) {
+//		checkBoxUsuario = new JCheckBox("Usuario");
+//		checkBoxUsuario.addActionListener(this);
+//		checkBoxUsuario.setBackground(new Color(255, 255, 255));
+//		perfilGrupo.add(checkBoxUsuario);
+//		checkBoxUsuario.setBounds(64, 507, 99, 23);
+//		getContentPane().add(checkBoxUsuario);
+		checkBoxUsuario = new JCheckBox("Usuario", false);
+		checkBoxUsuario.addActionListener(this);
 		checkBoxUsuario.setBackground(new Color(255, 255, 255));
-		generoGrupo.add(checkBoxUsuario);
+		getContentPane().add(checkBoxUsuario);
 		checkBoxUsuario.setBounds(64, 507, 99, 23);
 		getContentPane().add(checkBoxUsuario);
 
-		checkBoxTrabajador = new JCheckBox("Trabajador");
+//		checkBoxTrabajador = new JCheckBox("Trabajador");
+//		checkBoxTrabajador.setBackground(new Color(255, 255, 255));
+//		perfilGrupo.add(checkBoxTrabajador);
+//		checkBoxTrabajador.setBounds(162, 507, 99, 23);
+//		getContentPane().add(checkBoxTrabajador);
+//		checkBoxTrabajador.addActionListener(this);
+		checkBoxTrabajador = new JCheckBox("Trabajador", false);
 		checkBoxTrabajador.setBackground(new Color(255, 255, 255));
-		generoGrupo.add(checkBoxTrabajador);
+		getContentPane().add(checkBoxTrabajador);
 		checkBoxTrabajador.setBounds(162, 507, 99, 23);
 		getContentPane().add(checkBoxTrabajador);
+		checkBoxTrabajador.addActionListener(this);
 
-		Seleccione = new JLabel("Seleccione");
+		JLabel Seleccione = new JLabel("Seleccione");
 		Seleccione.setFont(new Font("Tahoma", Font.BOLD, 11));
 		Seleccione.setBounds(64, 467, 131, 14);
 		getContentPane().add(Seleccione);
 
 		lblFechaDeRegistro = new JLabel("Fecha de registro ");
 		lblFechaDeRegistro.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblFechaDeRegistro.setBounds(407, 507, 147, 14);
+		lblFechaDeRegistro.setBounds(456, 497, 147, 14);
 		getContentPane().add(lblFechaDeRegistro);
 
 		dateFRegistro = new JDateChooser();
-		dateFRegistro.setBounds(407, 532, 165, 23);
+		dateFRegistro.setBounds(456, 522, 165, 23);
 		getContentPane().add(dateFRegistro);
 
 		textNumeroSS = new JTextField();
 		textNumeroSS.setColumns(10);
-		textNumeroSS.setBounds(403, 442, 237, 29);
+		textNumeroSS.setBounds(456, 450, 237, 29);
 		getContentPane().add(textNumeroSS);
 
 		lblNmeroSeguridadSocial = new JLabel("Número Seguridad Social *");
 		lblNmeroSeguridadSocial.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblNmeroSeguridadSocial.setBounds(407, 420, 214, 14);
+		lblNmeroSeguridadSocial.setBounds(456, 424, 214, 14);
 		getContentPane().add(lblNmeroSeguridadSocial);
 
-		// Establecer por defecto el tamaño a la ventana
-		setSize(732, 748);
+		passConfirmar = new JPasswordField();
+		passConfirmar.setBounds(456, 256, 237, 29);
+		getContentPane().add(passConfirmar);
+
+		passContrasena = new JPasswordField();
+		passContrasena.setBounds(64, 256, 237, 29);
+		getContentPane().add(passContrasena);
+
+		// No se muestran los campos específicos de cada perfil
+		// Deshabilitar el campo de número de seguridad social
+		lblNmeroSeguridadSocial.setVisible(false);
+		textNumeroSS.setVisible(false);
+		// Mostrar el label y el campo de fecha de registro
+		lblFechaDeRegistro.setVisible(false);
+		dateFRegistro.setVisible(false);
 	}
 
-	private void seleccionarUsuario() {
-
-	}
-
+	/**
+	 * 
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(btnRegistro)) {
-			registrarPersona();
+			if (camposObligatoriosCompletos() == true) {
+				registrarPersona();
+			}
+
 		}
+		if (e.getSource().equals(checkBoxUsuario)) {
+			seleccionarUsuario();
+		}
+		if (e.getSource().equals(checkBoxTrabajador)) {
+			seleccionarTrabajador();
+		}
+		if (e.getSource().equals(btnRegistro)) {
+			if (btnRegistro.isShowing() && camposObligatoriosCompletos() == false) {
+				JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.",
+						"Campos obligatorios incompletos", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+
+	private boolean camposObligatoriosCompletos() {
+		boolean correcto = false;
+		char[] contrasena = passContrasena.getPassword();
+		char[] confirmarContrasena = passConfirmar.getPassword();
+		if (!textNombre.getText().isEmpty() && contrasena.length > 0 && !textEmail.getText().isEmpty()
+				&& confirmarContrasena.length > 0
+				&& (rBFemenino.isSelected() || rBMasculino.isSelected() || rBOtros.isSelected())
+				&& (checkBoxUsuario.isSelected() || checkBoxTrabajador.isSelected())
+				&& dateFechaNacimiento.getDate() != null) {
+			correcto = true;
+
+		}
+		return correcto;
+	}
+
+	private void seleccionarUsuario() {
+		if (checkBoxUsuario.isSelected()) {
+			// Deshabilitar el campo de número de seguridad social
+			lblNmeroSeguridadSocial.setVisible(false);
+			textNumeroSS.setVisible(false);
+			// Mostrar el label y el campo de fecha de registro
+			lblFechaDeRegistro.setVisible(true);
+			dateFRegistro.setVisible(true);
+
+		}
+	}
+
+	private void seleccionarTrabajador() {
+		if (checkBoxTrabajador.isSelected()) {
+			// Deshabilitar el campo de número de seguridad social
+			lblNmeroSeguridadSocial.setVisible(true);
+			textNumeroSS.setVisible(true);
+			// Mostrar el label y el campo de fecha de registro
+			lblFechaDeRegistro.setVisible(false);
+			dateFRegistro.setVisible(false);
+
+		}
+
 	}
 
 	private void registrarPersona() {
 		Persona persona = null;
-
 		if (checkBoxUsuario.isSelected()) {
 			persona = new Usuario();
 			cargarDatosComunes(persona);
 
 			((Usuario) persona)
 					.setFechaRegistro(dateFRegistro.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-			textNumeroSS.setEnabled(false);
 
 		} else if (checkBoxTrabajador.isSelected()) {
 			persona = new Trabajador();
@@ -267,11 +354,10 @@ public class Register extends JDialog implements ActionListener {
 
 		}
 
-		dao.registrarUsuario(persona);
+		Controlador.registrarUsuario(persona);
 	}
 
 	private void cargarDatosComunes(Persona persona) {
-
 		Sexo sexo;
 		persona.setApellido(textApellido.getText());
 		persona.setNombre(textNombre.getText());
@@ -283,7 +369,6 @@ public class Register extends JDialog implements ActionListener {
 
 		// Lo que hace es pasar esto a una lista todos los radio buttons
 		Enumeration<AbstractButton> radios = generoGrupo.getElements();
-
 		// Luego lo que haremos es recorrer todos los elementos de esta lista
 		while (radios.hasMoreElements()) {
 			// Obtiene el próximo elemento de laenumeración y lo asignamos a una variable
@@ -291,14 +376,14 @@ public class Register extends JDialog implements ActionListener {
 			JRadioButton radio = (JRadioButton) radios.nextElement();
 
 			// Si coincide que el botón de radio esta seleccionado, agregamos su texto(que
-			// representa el sexo) al área de texto
+			// representa el sexo) al área de texto.
+
 			if (radio.isSelected()) {
-				String textRadio = radio.getText();
+				String textRadio = radio.getText().toUpperCase();
 				sexo = Sexo.valueOf(textRadio);
 			}
 
 		}
 
 	}
-
 }
