@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
@@ -17,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 
 import clases.Articulo;
 import clases.Temporada;
+import controller.Dao;
 
 public class InsertDatosArticulo extends JDialog {
 
@@ -25,11 +27,14 @@ public class InsertDatosArticulo extends JDialog {
 	private JTextField tfModelo, tfNombre, tfPrecio, tfStock, tfColor, tfCodArticulo;
 	private final ButtonGroup btnTemporadaGroup = new ButtonGroup();
 	private JTextField tfPorcentaje;
+	JButton btnSubirDatos;
+	private static Dao dao;
 
 	/**
 	 * Create the dialog.
 	 */
-	public InsertDatosArticulo() {
+	public InsertDatosArticulo(Dao dao) {
+		this.dao = dao;
 		setBounds(100, 100, 859, 704);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -130,7 +135,7 @@ public class InsertDatosArticulo extends JDialog {
 		tfStock.setColumns(10);
 		contentPanel.add(tfStock);
 
-		JButton btnSubirDatos = new JButton("Subir Datos");
+		btnSubirDatos = new JButton("Subir Datos");
 		btnSubirDatos.setBounds(262, 564, 359, 60);
 		btnSubirDatos.setFont(new Font("Dialog", Font.BOLD, 18));
 		contentPanel.add(btnSubirDatos);
@@ -145,6 +150,17 @@ public class InsertDatosArticulo extends JDialog {
 		tfPorcentaje.setColumns(10);
 		tfPorcentaje.setBounds(418, 476, 225, 35);
 		contentPanel.add(tfPorcentaje);
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(btnSubirDatos)) {
+			subirDatos();
+		}
+	}
+
+	private void subirDatos() {
+		Articulo art = new Articulo();
+		dao.altaArticulo(art);
 	}
 
 	public void cargarDatosArticulo(Articulo articulo) {
