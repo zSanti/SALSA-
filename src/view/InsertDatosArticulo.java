@@ -18,7 +18,9 @@ import javax.swing.border.EmptyBorder;
 
 import clases.Articulo;
 import clases.Temporada;
+import controller.Controlador;
 import controller.Dao;
+import excepciones.CreateException;
 
 public class InsertDatosArticulo extends JDialog {
 
@@ -163,7 +165,7 @@ public class InsertDatosArticulo extends JDialog {
 		dao.altaArticulo(art);
 	}
 
-	public void cargarDatosArticulo(Articulo articulo) {
+	public void cargarDatosArticulo(Articulo articulo) throws CreateException {
 		Temporada temp;
 		// guardamos el texto de tf en una variable
 		String cod = tfCodArticulo.getText();
@@ -178,6 +180,7 @@ public class InsertDatosArticulo extends JDialog {
 		String precio = tfPrecio.getText();
 		int precio2 = Integer.parseInt(precio);
 		articulo.setPrecio(precio2);
+		articulo.setModelo(tfModelo.getText());
 		Enumeration<AbstractButton> botonesTemporada = btnTemporadaGroup.getElements();
 		while (botonesTemporada.hasMoreElements()) {
 
@@ -190,6 +193,7 @@ public class InsertDatosArticulo extends JDialog {
 			}
 
 		}
-
+		// para la creacion de un a excepcion pero hay que mirarlo, no se si esta bien
+		Controlador.altaArticulo(articulo);
 	}
 }

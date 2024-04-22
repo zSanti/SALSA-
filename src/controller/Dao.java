@@ -10,6 +10,6 @@ public interface Dao {
 
 	boolean registrarUsuario(Persona per);
 
-	void altaArticulo(Articulo art);
+	boolean altaArticulo(Articulo art);
 
 }
