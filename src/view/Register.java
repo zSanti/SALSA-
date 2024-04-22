@@ -298,6 +298,9 @@ public class Register extends JDialog implements ActionListener {
 	}
 
 	private boolean camposObligatoriosCompletos() {
+		// es este metodo vero, ponia que retornaba otra cosa cuando el metod esta
+		// diseñado para devolver un boolean por lo que cre un bolean y
+// lo puse en un if, ahora cuando se presione el boton de registro y los campos no esten rellenos te salta el mensaje de error que habias puesto
 		boolean correcto = false;
 		char[] contrasena = passContrasena.getPassword();
 		char[] confirmarContrasena = passConfirmar.getPassword();
