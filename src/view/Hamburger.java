@@ -1,22 +1,17 @@
 package view;
 
-import java.awt.EventQueue;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controller.Controlador;
-
-import java.awt.Color;
-import javax.swing.JButton;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.lang.ModuleLayer.Controller;
-import java.awt.event.ActionEvent;
+import controller.Dao;
 
 public class Hamburger extends JFrame {
 
@@ -29,36 +24,23 @@ public class Hamburger extends JFrame {
 	private JButton btnLogout;
 	private JPanel panel;
 	private JPanel panel2;
-	
+
 	// Controlador
 	private Controlador cont;
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Hamburger frame = new Hamburger();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private Dao dao;
 
 	/**
 	 * Create the frame.
 	 */
-	public Hamburger () {
-		Hamburguesa(false);
+	public Hamburger() {
+		Hamburguesa(dao, false);
 	}
-	public Hamburger (boolean oscuro) {
-		Hamburguesa(oscuro);
+
+	public Hamburger(Dao dao, boolean oscuro) {
+		Hamburguesa(dao, oscuro);
 	}
-	public void Hamburguesa(boolean oscuro) {
+
+	public void Hamburguesa(Dao dao, boolean oscuro) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 709);
 		contentPane = new JPanel();
@@ -66,117 +48,122 @@ public class Hamburger extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		panel = new JPanel();
 		panel.setBounds(337, 11, 6, 144);
 		panel.setBackground(new Color(0, 0, 0));
 		contentPane.add(panel);
-		
+
 		panel2 = new JPanel();
 		panel2.setBounds(337, 499, 6, 158);
 		panel2.setBackground(Color.BLACK);
 		contentPane.add(panel2);
-		  
-        btnIndex = createButton("Inicio");
-        btnIndex.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		inicio(oscuro);
-        	}
-        });
-        btnIndex.setBounds(254, 183, 176, 42);
-        contentPane.add(btnIndex);
 
-        btnSettings = createButton("Ajustes");
-        btnSettings.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		ajustes(oscuro);
-        	}
-        });
-        btnSettings.setBounds(254, 247, 176, 42);
-        contentPane.add(btnSettings);
+		btnIndex = createButton("Inicio");
+		btnIndex.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				inicio(oscuro);
+			}
+		});
+		btnIndex.setBounds(254, 183, 176, 42);
+		contentPane.add(btnIndex);
 
-        btnContact = createButton("Contacto");
-        btnContact.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		contacto();
-        	}
-        });
-        btnContact.setBounds(254, 309, 176, 42);
-        contentPane.add(btnContact);
+		btnSettings = createButton("Ajustes");
+		btnSettings.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ajustes(oscuro);
+			}
+		});
+		btnSettings.setBounds(254, 247, 176, 42);
+		contentPane.add(btnSettings);
 
-        btnAdministration = createButton("Administración");
-        btnAdministration.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		administracion(oscuro);
-        	}
-        });
-        btnAdministration.setBounds(240, 373, 202, 42);
-        contentPane.add(btnAdministration);
+		btnContact = createButton("Contacto");
+		btnContact.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				contacto();
+			}
+		});
+		btnContact.setBounds(254, 309, 176, 42);
+		contentPane.add(btnContact);
 
-        btnLogout = createButton("Cerrar sesión");
-        btnLogout.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		logout(oscuro);
-        	}
-        });
-        btnLogout.setBounds(254, 437, 176, 42);
-        contentPane.add(btnLogout);
-        if (oscuro) {
-        	cambioFondo();	
-        }
-        
-    }
+		btnAdministration = createButton("Administración");
+		btnAdministration.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				administracion(oscuro);
+			}
+		});
+		btnAdministration.setBounds(240, 373, 202, 42);
+		contentPane.add(btnAdministration);
+
+		btnLogout = createButton("Cerrar sesión");
+		btnLogout.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				logout(oscuro);
+			}
+		});
+		btnLogout.setBounds(254, 437, 176, 42);
+		contentPane.add(btnLogout);
+		if (oscuro) {
+			cambioFondo();
+		}
+
+	}
 
 	private JButton createButton(String text) {
-        JButton btn = new JButton(text);
-        btn.setFont(new Font("Tahoma", Font.BOLD, 20));
-        btn.setContentAreaFilled(false); // Establece el área de contenido del botón como no relleno
-        btn.setOpaque(false); // Hace que el botón sea transparente
-        btn.setBorderPainted(false); // Oculta el borde del botón
-        btn.setForeground(Color.BLACK); // Establece el color del texto del botón
-        return btn;
-    }
+		JButton btn = new JButton(text);
+		btn.setFont(new Font("Tahoma", Font.BOLD, 20));
+		btn.setContentAreaFilled(false); // Establece el área de contenido del botón como no relleno
+		btn.setOpaque(false); // Hace que el botón sea transparente
+		btn.setBorderPainted(false); // Oculta el borde del botón
+		btn.setForeground(Color.BLACK); // Establece el color del texto del botón
+		return btn;
+	}
 
 	protected void logout(boolean oscuro) {
-		Login log = new Login(oscuro);
+		Login log = new Login(cont, oscuro);
 		log.setVisible(true);
 		setVisible(false);
 	}
-	
+
 	protected void administracion(boolean oscuro) {
-		Administracion admin = new Administracion(oscuro);
+		Administracion admin = new Administracion(dao, oscuro);
 		admin.setVisible(true);
 		setVisible(false);
-		
+
 	}
-	
+
 	protected void contacto() {
 		Contacto contact = new Contacto();
 		contact.setVisible(true);
 		setVisible(false);
 	}
-	
-    protected void ajustes(boolean oscuro) {
-		Ajustes settings = new Ajustes(oscuro);
+
+	protected void ajustes(boolean oscuro) {
+		Ajustes settings = new Ajustes(dao ,oscuro);
 		settings.setVisible(true);
 		setVisible(false);
 	}
-	
+
 	protected void inicio(boolean oscuro) {
-		Main index = new Main(oscuro);
+		Main index = new Main(oscuro, null, cont, null, oscuro);
 		index.setVisible(true);
 		setVisible(false);
 	}
-	
+
 	private void cambioFondo() {
-			panel.setBackground(Color.WHITE);
-			panel2.setBackground(Color.WHITE);
-			btnIndex.setForeground(Color.WHITE);
-			btnAdministration.setForeground(Color.WHITE);
-			btnContact.setForeground(Color.WHITE);
-			btnLogout.setForeground(Color.WHITE);
-			btnSettings.setForeground(Color.WHITE);
-			contentPane.setBackground(Color.DARK_GRAY);
-		
+		panel.setBackground(Color.WHITE);
+		panel2.setBackground(Color.WHITE);
+		btnIndex.setForeground(Color.WHITE);
+		btnAdministration.setForeground(Color.WHITE);
+		btnContact.setForeground(Color.WHITE);
+		btnLogout.setForeground(Color.WHITE);
+		btnSettings.setForeground(Color.WHITE);
+		contentPane.setBackground(Color.DARK_GRAY);
+
 	}
 }

@@ -9,6 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import controller.Dao;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -21,7 +24,7 @@ public class Administracion extends JFrame {
 	private JPanel contentPane, panelAdvise;
     private JLabel lblAdvise1, lblAdvise2, lblAdvise3;
 
-    public Administracion(boolean oscuro) {
+    public Administracion(Dao dao, boolean oscuro) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 669, 692);
         contentPane = new JPanel();
@@ -83,7 +86,7 @@ public class Administracion extends JFrame {
         JButton btnInsertarNuevoArtculo = new JButton("Insertar Nuevo Artículo");
         btnInsertarNuevoArtculo.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		insertDat(oscuro);
+        		insertDat(dao, oscuro);
         	}
         });
         btnInsertarNuevoArtculo.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -93,7 +96,7 @@ public class Administracion extends JFrame {
         JButton btnVolver = new JButton("Volver");
         btnVolver.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		volver(oscuro);
+        		volver(dao ,oscuro);
         	}
         });
         btnVolver.setBounds(10, 10, 85, 21);
@@ -112,8 +115,8 @@ public class Administracion extends JFrame {
 		lblAdvise3.setForeground(Color.WHITE);
 	}
 
-	protected void insertDat(boolean oscuro) {
-		InsertDatosArticulo insert = new InsertDatosArticulo(oscuro);
+	protected void insertDat(Dao dao, boolean oscuro) {
+		InsertDatosArticulo insert = new InsertDatosArticulo(dao, oscuro);
 		insert.setVisible(true);
 		setVisible(false);
 	}
@@ -131,8 +134,8 @@ public class Administracion extends JFrame {
 		
 	}
 
-	protected void volver(boolean oscuro) {
-		Hamburger ham = new Hamburger(oscuro);
+	protected void volver(Dao dao, boolean oscuro) {
+		Hamburger ham = new Hamburger(dao, oscuro);
 		ham.setVisible(true);
 		setVisible(false);
 	}
