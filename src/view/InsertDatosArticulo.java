@@ -35,7 +35,7 @@ public class InsertDatosArticulo extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public InsertDatosArticulo(Dao dao) {
+	public InsertDatosArticulo(Dao dao, boolean oscuro) {
 		this.dao = dao;
 		setBounds(100, 100, 859, 704);
 		getContentPane().setLayout(new BorderLayout());

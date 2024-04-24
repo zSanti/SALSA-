@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.ZoneId;
@@ -18,6 +20,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -33,32 +36,19 @@ import controller.Controlador;
 public class Register extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField textNombre;
-	private JTextField textEmail;
-	private JTextField textDni;
-	private JTextField textApellido;
-	private JTextField tFEmailConfirmado;
-	private JTextField textDireccion;
+	private JPanel contentPane;
+	private JTextField textNombre, textEmail, textContraseña, textDni, textApellido, tFEmailConfirmado, tFContraeñaConfirmada, textDireccion, textNumeroSS;
 	private ButtonGroup generoGrupo = new ButtonGroup();
-	// private ButtonGroup perfilGrupo = new ButtonGroup();
-	// He modificado esto para poder probar
-	private CheckboxGroup perfilGrupo = new CheckboxGroup();
 	private JCheckBox checkBoxUsuario, checkBoxTrabajador;
-
-	private JTextField textNumeroSS;
 	private JButton btnRegistro;
-	private JDateChooser dateFRegistro;
-	private JDateChooser dateFechaNacimiento;
-	private JRadioButton rBFemenino;
-	private JRadioButton rBMasculino;
-	private JRadioButton rBOtros;
+	private JDateChooser dateFRegistro, dateFechaNacimiento;
+	private JRadioButton rBFemenino, rBMasculino, rBOtros;
 	private static Controlador cont;
-	private JLabel lblFechaDeRegistro;
-	private JLabel lblNmeroSeguridadSocial;
+	private JLabel lblFechaDeRegistro, lblIniciaSesion, lblPregunta, lblInicioSesion, lblNombre, lblEmail, lblContrasena, lblDni, lblSexo_1, lblPrimerApellido, lblConfirmarEmail, lblConfirmeLaContrasea, lblDireccion, lblNmeroSeguridadSocial, Seleccione, lblCamposObligatorios, lblFecNa;
 	private JPasswordField passConfirmar;
 	private JPasswordField passContrasena;
 
-	public Register(Controlador cont, Login padre, boolean modal) {
+	public Register(Controlador cont, Login padre, boolean modal, boolean oscuro) {
 		super(padre);
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -270,8 +260,55 @@ public class Register extends JDialog implements ActionListener {
 		// Mostrar el label y el campo de fecha de registro
 		lblFechaDeRegistro.setVisible(false);
 		dateFRegistro.setVisible(false);
+		
+		lblPregunta = new JLabel("¿Ya tienes cuenta?");
+		lblPregunta.setBounds(262, 650, 114, 13);
+		getContentPane().add(lblPregunta);
+		
+		lblInicioSesion = new JLabel("Inicia Sesion");
+		lblInicioSesion.setBounds(375, 650, 78, 13);
+		lblInicioSesion.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				inicioSesion(oscuro);
+			}
+		});
+		lblInicioSesion.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblInicioSesion.setForeground(new Color(0, 51, 255));
+		getContentPane().add(lblInicioSesion);
+		
+		//if (oscuro) {
+		//	cambioFondo();
+//	}
 	}
 
+
+	protected void inicioSesion(boolean oscuro) {
+		Login log = new Login(cont, oscuro);
+		log.setVisible(true);
+		setVisible(false);
+		
+	}
+	
+/*	private void cambioFondo() {
+		contentPane.setBackground(Color.DARK_GRAY);
+		lblFechaDeRegistro.setForeground(Color.WHITE);
+		lblConfirmarEmail.setForeground(Color.WHITE);
+		lblConfirmeLaContrasea.setForeground(Color.WHITE);
+		lblContrasena.setForeground(Color.WHITE);
+		lblDireccion.setForeground(Color.WHITE);
+		lblDni.setForeground(Color.WHITE);
+		lblEmail.setForeground(Color.WHITE);
+		lblNombre.setForeground(Color.WHITE);
+		lblPrimerApellido.setForeground(Color.WHITE);
+		lblFecNa.setForeground(Color.WHITE);
+		lblCamposObligatorios.setForeground(Color.WHITE);
+		Seleccione.setForeground(Color.WHITE);
+		lblNmeroSeguridadSocial.setForeground(Color.WHITE);
+		lblPregunta.setForeground(Color.WHITE);
+		lblSexo_1.setForeground(Color.WHITE);
+		
+	}*/
 	/**
 	 * 
 	 */

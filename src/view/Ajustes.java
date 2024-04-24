@@ -20,6 +20,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import controller.Dao;
+
 public class Ajustes extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -33,7 +35,7 @@ public class Ajustes extends JDialog {
 	// Comprobar si anda en modo diurno o nocturno
 	private boolean oscuro;
 
-	public Ajustes(boolean oscuro) {
+	public Ajustes(Dao dao, boolean oscuro) {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 626, 472);
 		contentPane = new JPanel();
@@ -72,7 +74,7 @@ public class Ajustes extends JDialog {
 		btnVolver.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				volver();
+				volver(dao ,oscuro);
 			}
 		});
 		btnVolver.setBounds(10, 10, 85, 21);
@@ -144,8 +146,8 @@ public class Ajustes extends JDialog {
 		cambiarTema(oscuro ? 1 : 0);
 	}
 
-	protected void volver() {
-		Hamburger ham = new Hamburger(oscuro);
+	protected void volver(Dao dao, boolean oscuro) {
+		Hamburger ham = new Hamburger(dao, oscuro);
 		ham.setVisible(true);
 		setVisible(false);
 	}

@@ -33,14 +33,14 @@ public class Hamburger extends JFrame {
 	 * Create the frame.
 	 */
 	public Hamburger() {
-		Hamburguesa(false);
+		Hamburguesa(dao, false);
 	}
 
-	public Hamburger(boolean oscuro) {
-		Hamburguesa(oscuro);
+	public Hamburger(Dao dao, boolean oscuro) {
+		Hamburguesa(dao, oscuro);
 	}
 
-	public void Hamburguesa(boolean oscuro) {
+	public void Hamburguesa(Dao dao, boolean oscuro) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 709);
 		contentPane = new JPanel();
@@ -131,7 +131,7 @@ public class Hamburger extends JFrame {
 	}
 
 	protected void administracion(boolean oscuro) {
-		Administracion admin = new Administracion(oscuro);
+		Administracion admin = new Administracion(dao, oscuro);
 		admin.setVisible(true);
 		setVisible(false);
 
@@ -144,7 +144,7 @@ public class Hamburger extends JFrame {
 	}
 
 	protected void ajustes(boolean oscuro) {
-		Ajustes settings = new Ajustes(oscuro);
+		Ajustes settings = new Ajustes(dao ,oscuro);
 		settings.setVisible(true);
 		setVisible(false);
 	}
