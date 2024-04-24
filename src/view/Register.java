@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.CheckboxGroup;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,7 +8,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.ZoneId;
 
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,7 +17,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
@@ -39,23 +36,22 @@ public class Register extends JDialog implements ActionListener {
 	private JTextField textApellido;
 	private JTextField tFEmailConfirmado;
 	private JTextField textDireccion;
-	private ButtonGroup generoGrupo = new ButtonGroup();
+	// private ButtonGroup generoGrupo = new ButtonGroup();
 	// private ButtonGroup perfilGrupo = new ButtonGroup();
 	// He modificado esto para poder probar
-	private CheckboxGroup perfilGrupo = new CheckboxGroup();
+	// private CheckboxGroup perfilGrupo = new CheckboxGroup();
 	private JCheckBox checkBoxUsuario, checkBoxTrabajador;
 
 	private JTextField textNumeroSS;
 	private JButton btnRegistro;
 	private JDateChooser dateFRegistro;
 	private JDateChooser dateFechaNacimiento;
-	private JRadioButton rBFemenino;
-	private JRadioButton rBMasculino;
-	private JRadioButton rBOtros;
 	private JLabel lblFechaDeRegistro;
 	private JLabel lblNmeroSeguridadSocial;
 	private JPasswordField passConfirmar;
 	private JPasswordField passContrasena;
+
+	private JComboBox<Sexo> comboBoxGenero;
 
 	public Register(Login padre, boolean modal) {
 		super(padre);
@@ -106,27 +102,6 @@ public class Register extends JDialog implements ActionListener {
 		lblDni.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblDni.setBounds(64, 296, 147, 14);
 		getContentPane().add(lblDni);
-
-		// Grupo de sexo
-//		generoGrupo = new ButtonGroup();
-//
-//		rBFemenino = new JRadioButton("Femenino");
-//		generoGrupo.add(rBFemenino);
-//		rBFemenino.setBackground(new Color(255, 255, 255));
-//		rBFemenino.setBounds(64, 395, 111, 23);
-//		getContentPane().add(rBFemenino);
-//
-//		rBMasculino = new JRadioButton("Masculino");
-//		generoGrupo.add(rBMasculino);
-//		rBMasculino.setBackground(new Color(255, 255, 255));
-//		rBMasculino.setBounds(190, 395, 111, 23);
-//		getContentPane().add(rBMasculino);
-//
-//		rBOtros = new JRadioButton("Otros");
-//		generoGrupo.add(rBOtros);
-//		rBOtros.setBackground(new Color(255, 255, 255));
-//		rBOtros.setBounds(64, 421, 111, 23);
-//		getContentPane().add(rBOtros);
 
 		JLabel lblSexo = new JLabel("Fecha de nacimiento ");
 		lblSexo.setFont(new Font("Dialog", Font.BOLD, 12));
@@ -261,10 +236,10 @@ public class Register extends JDialog implements ActionListener {
 		passContrasena.setBounds(64, 256, 237, 29);
 		getContentPane().add(passContrasena);
 
-		JComboBox<Sexo> comboBoxGenero = new JComboBox<>();
+		comboBoxGenero = new JComboBox<>();
 		comboBoxGenero.setFont(new Font("Dialog", Font.BOLD, 14));
 		comboBoxGenero.setModel(new DefaultComboBoxModel<>(Sexo.values()));
-		comboBoxGenero.setToolTipText("\r\nMasculino\r\nFemenino\r\nOtros\r\n");
+		comboBoxGenero.setToolTipText("");
 		comboBoxGenero.setEditable(true);
 		comboBoxGenero.setBounds(64, 406, 131, 21);
 		getContentPane().add(comboBoxGenero);
@@ -367,7 +342,7 @@ public class Register extends JDialog implements ActionListener {
 	}
 
 	private void cargarDatosComunes(Persona persona) {
-		// Sexo sexo;
+
 		persona.setApellido(textApellido.getText());
 		persona.setNombre(textNombre.getText());
 		persona.setDni(textDni.getText());
@@ -375,21 +350,9 @@ public class Register extends JDialog implements ActionListener {
 		persona.setFechaNacimiento(
 				dateFechaNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		persona.setDireccion(textDireccion.getText());
+		persona.setContrasena(new String(passContrasena.getPassword()));
+		persona.setGenero((Sexo) comboBoxGenero.getSelectedItem());
 
-		// Lo que hace es pasar esto a una lista todos los radio buttons
-		// Enumeration<AbstractButton> radios = generoGrupo.getElements();
-		// Luego lo que haremos es recorrer todos los elementos de esta lista
-		// while (radios.hasMoreElements()) {
-		// Obtiene el próximo elemento de laenumeración y lo asignamos a una variable
-		// radio
-//			JRadioButton radio = (JRadioButton) radios.nextElement();
-
-		// Si coincide que el botón de radio esta seleccionado, agregamos su texto(que
-		// representa el sexo) al área de texto.
-
-		// if (radio.isSelected()) {
-		// String textRadio = radio.getText().toUpperCase();
-		// sexo = Sexo.valueOf(textRadio);
 	}
 	// }
 

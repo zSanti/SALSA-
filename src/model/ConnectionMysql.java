@@ -29,7 +29,7 @@ public class ConnectionMysql {
 	}
 
 	// Cerrar la conexion de la base de datos
-	public void closeConnection() {
+	public static Connection closeConnection() {
 		try {
 			if (conn != null) {
 				conn.close();
@@ -37,5 +37,6 @@ public class ConnectionMysql {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return conn;
 	}
 }

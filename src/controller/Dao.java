@@ -12,4 +12,6 @@ public interface Dao {
 
 	boolean altaArticulo(Articulo art);
 
+	// void comprobarUsuario(Persona per);
+
 }

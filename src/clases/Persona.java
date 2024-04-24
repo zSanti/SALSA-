@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Persona {
 	private String dni, nombre, apellido, email, direccion, contrasena, rol;
 	private LocalDate fechaNacimiento;
-	private String genero;
+	private Sexo genero;
 
 	// Getters y Setters
 	public String getDni() {
@@ -56,11 +56,11 @@ public class Persona {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
-	public String getGenero() {
+	public Sexo getGenero() {
 		return genero;
 	}
 
-	public void setGenero(String genero) {
+	public void setGenero(Sexo genero) {
 		this.genero = genero;
 	}
 
