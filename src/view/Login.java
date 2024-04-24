@@ -154,13 +154,17 @@ public class Login extends JFrame implements ActionListener {
 	}
 
 	private void login() {
-
+		if (btnLogin.isSelected()) {
+			Main ven = new Main(this, true, cont);
+			super.dispose();
+			ven.setVisible(true);
+		}
 	}
 
 	protected void registro() {
 
 		// Crear una instancia de la vista Login
-		Register registro = new Register(cont, this, true);
+		Register registro = new Register(this, true);
 		// Cerramos
 		super.dispose();
 

@@ -26,10 +26,9 @@ public class Main extends JDialog {
 	// Interfaz
 	private Dao dao;
 
-	public Main(boolean oscuro, Dao dao, Controlador cont, Register padre, boolean modal) {
-		super(padre);
+	public Main(Login login, boolean modal, Controlador cont) {
+		super(login);
 		setModal(modal);
-		this.dao = dao;
 		setBounds(100, 100, 1082, 836);
 		BodyLayout = new JPanel();
 		BodyLayout.setBackground(new Color(255, 255, 255));
@@ -95,4 +94,5 @@ public class Main extends JDialog {
 			itemsPanel.add(item);
 		}
 	}
+
 }

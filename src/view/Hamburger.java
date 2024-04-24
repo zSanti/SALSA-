@@ -150,7 +150,7 @@ public class Hamburger extends JFrame {
 	}
 
 	protected void inicio(boolean oscuro) {
-		Main index = new Main(oscuro, null, cont, null, oscuro);
+		Main index = new Main(null, oscuro, cont);
 		index.setVisible(true);
 		setVisible(false);
 	}

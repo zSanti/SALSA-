@@ -8,13 +8,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.ZoneId;
-import java.util.Enumeration;
 
-import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -52,13 +52,12 @@ public class Register extends JDialog implements ActionListener {
 	private JRadioButton rBFemenino;
 	private JRadioButton rBMasculino;
 	private JRadioButton rBOtros;
-	private static Controlador cont;
 	private JLabel lblFechaDeRegistro;
 	private JLabel lblNmeroSeguridadSocial;
 	private JPasswordField passConfirmar;
 	private JPasswordField passContrasena;
 
-	public Register(Controlador cont, Login padre, boolean modal) {
+	public Register(Login padre, boolean modal) {
 		super(padre);
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -67,7 +66,6 @@ public class Register extends JDialog implements ActionListener {
 			}
 		});
 		setModal(modal);
-		this.cont = cont;
 		setSize(729, 700);
 		getContentPane().setFont(new Font("Dialog", Font.BOLD, 12));
 		getContentPane().setBackground(new Color(255, 255, 255));
@@ -110,19 +108,25 @@ public class Register extends JDialog implements ActionListener {
 		getContentPane().add(lblDni);
 
 		// Grupo de sexo
-		generoGrupo = new ButtonGroup();
-
-		rBFemenino = new JRadioButton("Femenino");
-		generoGrupo.add(rBFemenino);
-		rBFemenino.setBackground(new Color(255, 255, 255));
-		rBFemenino.setBounds(64, 395, 111, 23);
-		getContentPane().add(rBFemenino);
-
-		rBMasculino = new JRadioButton("Masculino");
-		generoGrupo.add(rBMasculino);
-		rBMasculino.setBackground(new Color(255, 255, 255));
-		rBMasculino.setBounds(190, 395, 111, 23);
-		getContentPane().add(rBMasculino);
+//		generoGrupo = new ButtonGroup();
+//
+//		rBFemenino = new JRadioButton("Femenino");
+//		generoGrupo.add(rBFemenino);
+//		rBFemenino.setBackground(new Color(255, 255, 255));
+//		rBFemenino.setBounds(64, 395, 111, 23);
+//		getContentPane().add(rBFemenino);
+//
+//		rBMasculino = new JRadioButton("Masculino");
+//		generoGrupo.add(rBMasculino);
+//		rBMasculino.setBackground(new Color(255, 255, 255));
+//		rBMasculino.setBounds(190, 395, 111, 23);
+//		getContentPane().add(rBMasculino);
+//
+//		rBOtros = new JRadioButton("Otros");
+//		generoGrupo.add(rBOtros);
+//		rBOtros.setBackground(new Color(255, 255, 255));
+//		rBOtros.setBounds(64, 421, 111, 23);
+//		getContentPane().add(rBOtros);
 
 		JLabel lblSexo = new JLabel("Fecha de nacimiento ");
 		lblSexo.setFont(new Font("Dialog", Font.BOLD, 12));
@@ -168,12 +172,6 @@ public class Register extends JDialog implements ActionListener {
 		lblNewLabel.setIcon(new ImageIcon(getClass().getResource("/assets/logo.png")));
 		lblNewLabel.setBounds(235, 11, 278, 62);
 		getContentPane().add(lblNewLabel);
-
-		rBOtros = new JRadioButton("Otros");
-		generoGrupo.add(rBOtros);
-		rBOtros.setBackground(new Color(255, 255, 255));
-		rBOtros.setBounds(64, 421, 111, 23);
-		getContentPane().add(rBOtros);
 
 		JLabel lblDireccion_1 = new JLabel("");
 		lblDireccion_1.setBounds(321, 450, 147, 14);
@@ -263,6 +261,14 @@ public class Register extends JDialog implements ActionListener {
 		passContrasena.setBounds(64, 256, 237, 29);
 		getContentPane().add(passContrasena);
 
+		JComboBox<Sexo> comboBoxGenero = new JComboBox<>();
+		comboBoxGenero.setFont(new Font("Dialog", Font.BOLD, 14));
+		comboBoxGenero.setModel(new DefaultComboBoxModel<>(Sexo.values()));
+		comboBoxGenero.setToolTipText("\r\nMasculino\r\nFemenino\r\nOtros\r\n");
+		comboBoxGenero.setEditable(true);
+		comboBoxGenero.setBounds(64, 406, 131, 21);
+		getContentPane().add(comboBoxGenero);
+
 		// No se muestran los campos específicos de cada perfil
 		// Deshabilitar el campo de número de seguridad social
 		lblNmeroSeguridadSocial.setVisible(false);
@@ -293,21 +299,21 @@ public class Register extends JDialog implements ActionListener {
 			if (btnRegistro.isShowing() && camposObligatoriosCompletos() == false) {
 				JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.",
 						"Campos obligatorios incompletos", JOptionPane.ERROR_MESSAGE);
+			} else if (btnRegistro.isShowing() && camposObligatoriosCompletos() == true) {
+				this.dispose();
 			}
 		}
 	}
 
 	private boolean camposObligatoriosCompletos() {
-		// es este metodo vero, ponia que retornaba otra cosa cuando el metod esta
-		// diseñado para devolver un boolean por lo que cre un bolean y
-// lo puse en un if, ahora cuando se presione el boton de registro y los campos no esten rellenos te salta el mensaje de error que habias puesto
+
 		boolean correcto = false;
 		char[] contrasena = passContrasena.getPassword();
 		char[] confirmarContrasena = passConfirmar.getPassword();
+		// comprobacion de que todos los campos que sean rellenados
+		// si los campos obligatorios no estan rellenados salta el mensaje de error
 		if (!textNombre.getText().isEmpty() && contrasena.length > 0 && !textEmail.getText().isEmpty()
-				&& confirmarContrasena.length > 0
-				&& (rBFemenino.isSelected() || rBMasculino.isSelected() || rBOtros.isSelected())
-				&& (checkBoxUsuario.isSelected() || checkBoxTrabajador.isSelected())
+				&& confirmarContrasena.length > 0 && (checkBoxUsuario.isSelected() || checkBoxTrabajador.isSelected())
 				&& dateFechaNacimiento.getDate() != null) {
 			correcto = true;
 
@@ -361,7 +367,7 @@ public class Register extends JDialog implements ActionListener {
 	}
 
 	private void cargarDatosComunes(Persona persona) {
-		Sexo sexo;
+		// Sexo sexo;
 		persona.setApellido(textApellido.getText());
 		persona.setNombre(textNombre.getText());
 		persona.setDni(textDni.getText());
@@ -371,22 +377,20 @@ public class Register extends JDialog implements ActionListener {
 		persona.setDireccion(textDireccion.getText());
 
 		// Lo que hace es pasar esto a una lista todos los radio buttons
-		Enumeration<AbstractButton> radios = generoGrupo.getElements();
+		// Enumeration<AbstractButton> radios = generoGrupo.getElements();
 		// Luego lo que haremos es recorrer todos los elementos de esta lista
-		while (radios.hasMoreElements()) {
-			// Obtiene el próximo elemento de laenumeración y lo asignamos a una variable
-			// radio
-			JRadioButton radio = (JRadioButton) radios.nextElement();
+		// while (radios.hasMoreElements()) {
+		// Obtiene el próximo elemento de laenumeración y lo asignamos a una variable
+		// radio
+//			JRadioButton radio = (JRadioButton) radios.nextElement();
 
-			// Si coincide que el botón de radio esta seleccionado, agregamos su texto(que
-			// representa el sexo) al área de texto.
+		// Si coincide que el botón de radio esta seleccionado, agregamos su texto(que
+		// representa el sexo) al área de texto.
 
-			if (radio.isSelected()) {
-				String textRadio = radio.getText().toUpperCase();
-				sexo = Sexo.valueOf(textRadio);
-			}
-
-		}
-
+		// if (radio.isSelected()) {
+		// String textRadio = radio.getText().toUpperCase();
+		// sexo = Sexo.valueOf(textRadio);
 	}
+	// }
+
 }
