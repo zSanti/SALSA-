@@ -127,7 +127,7 @@ public class Login extends JFrame implements ActionListener {
 		linkRegister.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				registro();
+				registro(oscuro);
 			}
 		});
 		panelRight.add(linkRegister);
@@ -161,17 +161,18 @@ public class Login extends JFrame implements ActionListener {
 		}
 	}
 
-	protected void registro() {
+	protected void registro(boolean oscuro) {
 
 		// Crear una instancia de la vista Login
+
 		Register registro = new Register(this, true);
+
 		// Cerramos
 		super.dispose();
-
-		// this.setVisible(false);
 		registro.setVisible(true);
 
-		this.setVisible(true);
+		// this.setVisible(false);
+
 	}
 
 }

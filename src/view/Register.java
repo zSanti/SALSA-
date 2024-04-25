@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.ZoneId;
@@ -16,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
@@ -30,6 +33,7 @@ import controller.Controlador;
 public class Register extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+
 	private JTextField textNombre, textEmail, textDni, textApellido, tFEmailConfirmado, textDireccion, textNumeroSS;
 	private JCheckBox checkBoxUsuario, checkBoxTrabajador;
 	private JButton btnRegistro;
@@ -223,8 +227,55 @@ public class Register extends JDialog implements ActionListener {
 		// Mostrar el label y el campo de fecha de registro
 		lblFechaDeRegistro.setVisible(false);
 		dateFRegistro.setVisible(false);
+		
+		lblPregunta = new JLabel("¿Ya tienes cuenta?");
+		lblPregunta.setBounds(262, 650, 114, 13);
+		getContentPane().add(lblPregunta);
+		
+		lblInicioSesion = new JLabel("Inicia Sesion");
+		lblInicioSesion.setBounds(375, 650, 78, 13);
+		lblInicioSesion.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				inicioSesion(oscuro);
+			}
+		});
+		lblInicioSesion.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblInicioSesion.setForeground(new Color(0, 51, 255));
+		getContentPane().add(lblInicioSesion);
+		
+		//if (oscuro) {
+		//	cambioFondo();
+//	}
 	}
 
+
+	protected void inicioSesion(boolean oscuro) {
+		Login log = new Login(cont, oscuro);
+		log.setVisible(true);
+		setVisible(false);
+		
+	}
+	
+/*	private void cambioFondo() {
+		contentPane.setBackground(Color.DARK_GRAY);
+		lblFechaDeRegistro.setForeground(Color.WHITE);
+		lblConfirmarEmail.setForeground(Color.WHITE);
+		lblConfirmeLaContrasea.setForeground(Color.WHITE);
+		lblContrasena.setForeground(Color.WHITE);
+		lblDireccion.setForeground(Color.WHITE);
+		lblDni.setForeground(Color.WHITE);
+		lblEmail.setForeground(Color.WHITE);
+		lblNombre.setForeground(Color.WHITE);
+		lblPrimerApellido.setForeground(Color.WHITE);
+		lblFecNa.setForeground(Color.WHITE);
+		lblCamposObligatorios.setForeground(Color.WHITE);
+		Seleccione.setForeground(Color.WHITE);
+		lblNmeroSeguridadSocial.setForeground(Color.WHITE);
+		lblPregunta.setForeground(Color.WHITE);
+		lblSexo_1.setForeground(Color.WHITE);
+		
+	}*/
 	/**
 	 * 
 	 */
