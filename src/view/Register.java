@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.ZoneId;
@@ -18,7 +18,6 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
@@ -30,20 +29,30 @@ import clases.Trabajador;
 import clases.Usuario;
 import controller.Controlador;
 
-public class Register extends JDialog implements ActionListener {
+public class Register extends JDialog implements ActionListener, MouseListener {
 
 	private static final long serialVersionUID = 1L;
 
 	private JTextField textNombre, textEmail, textDni, textApellido, tFEmailConfirmado, textDireccion, textNumeroSS;
-	private JCheckBox checkBoxUsuario, checkBoxTrabajador;
+	private JLabel Seleccione, lblPregunta, lblEmail, lblContrasena, lblDni, lblSexo,lblPrimerApellido,lblConfirmarEmail, lblConfirmeLaContrasea,
+	lblDireccion, lblNewLabel, lblDireccion_1, lblSexo_1, lblFechaDeRegistro, lblNmeroSeguridadSocial, lblInicioSesion,
+	lblCamposObligatorios, lblFecNa, lblNombre;	
 	private JButton btnRegistro;
 	private JDateChooser dateFRegistro, dateFechaNacimiento;
-	private JLabel lblFechaDeRegistro, lblNmeroSeguridadSocial;
 	private JPasswordField passConfirmar, passContrasena;
 	private JComboBox<Sexo> comboBoxGenero;
-
-	public Register(Login padre, boolean modal) {
+	private JCheckBox checkBoxUsuario, checkBoxTrabajador;
+	
+	// Lógica para la conexión
+	private Controlador controladorRutas;
+	private Persona persona;
+	private boolean oscuro;
+	
+	public Register(Login padre, Controlador controladorRutas, boolean modal, boolean oscuro) {
 		super(padre);
+		this.controladorRutas = controladorRutas;
+		this.persona = persona;
+		
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosed(WindowEvent e) {
@@ -62,7 +71,7 @@ public class Register extends JDialog implements ActionListener {
 		getContentPane().add(textNombre);
 		textNombre.setColumns(10);
 
-		JLabel lblNombre = new JLabel("Nombre *");
+		lblNombre = new JLabel("Nombre *");
 		lblNombre.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblNombre.setBounds(64, 101, 78, 14);
 		getContentPane().add(lblNombre);
@@ -71,13 +80,13 @@ public class Register extends JDialog implements ActionListener {
 		textEmail.setColumns(10);
 		textEmail.setBounds(64, 191, 237, 29);
 		getContentPane().add(textEmail);
-
-		JLabel lblEmail = new JLabel("Email *");
+		
+		lblEmail = new JLabel("Email *");
 		lblEmail.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblEmail.setBounds(64, 166, 49, 14);
 		getContentPane().add(lblEmail);
 
-		JLabel lblContrasena = new JLabel("Contraseña*");
+		lblContrasena = new JLabel("Contraseña*");
 		lblContrasena.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblContrasena.setBounds(64, 231, 147, 14);
 		getContentPane().add(lblContrasena);
@@ -87,17 +96,17 @@ public class Register extends JDialog implements ActionListener {
 		textDni.setBounds(64, 321, 237, 29);
 		getContentPane().add(textDni);
 
-		JLabel lblDni = new JLabel("DNI*");
+		lblDni = new JLabel("DNI*");
 		lblDni.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblDni.setBounds(64, 296, 147, 14);
 		getContentPane().add(lblDni);
 
-		JLabel lblSexo = new JLabel("Fecha de nacimiento ");
+		lblSexo = new JLabel("Fecha de nacimiento ");
 		lblSexo.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblSexo.setBounds(456, 361, 147, 14);
 		getContentPane().add(lblSexo);
 
-		JLabel lblPrimerApellido = new JLabel("Primer apellido*");
+		lblPrimerApellido = new JLabel("Primer apellido*");
 		lblPrimerApellido.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblPrimerApellido.setBounds(456, 101, 131, 14);
 		getContentPane().add(lblPrimerApellido);
@@ -112,12 +121,12 @@ public class Register extends JDialog implements ActionListener {
 		tFEmailConfirmado.setBounds(456, 191, 237, 29);
 		getContentPane().add(tFEmailConfirmado);
 
-		JLabel lblConfirmarEmail = new JLabel("Confirmar Email *");
+		lblConfirmarEmail = new JLabel("Confirmar Email *");
 		lblConfirmarEmail.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblConfirmarEmail.setBounds(456, 166, 138, 14);
 		getContentPane().add(lblConfirmarEmail);
 
-		JLabel lblConfirmeLaContrasea = new JLabel("Confirma la contraseña*");
+		lblConfirmeLaContrasea = new JLabel("Confirma la contraseña*");
 		lblConfirmeLaContrasea.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblConfirmeLaContrasea.setBounds(456, 231, 147, 14);
 		getContentPane().add(lblConfirmeLaContrasea);
@@ -127,21 +136,21 @@ public class Register extends JDialog implements ActionListener {
 		textDireccion.setBounds(456, 321, 237, 29);
 		getContentPane().add(textDireccion);
 
-		JLabel lblDireccion = new JLabel("Dirección *");
+		lblDireccion = new JLabel("Dirección *");
 		lblDireccion.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblDireccion.setBounds(456, 296, 147, 14);
 		getContentPane().add(lblDireccion);
 
-		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(getClass().getResource("/assets/logo.png")));
 		lblNewLabel.setBounds(235, 11, 278, 62);
 		getContentPane().add(lblNewLabel);
 
-		JLabel lblDireccion_1 = new JLabel("");
+		lblDireccion_1 = new JLabel("");
 		lblDireccion_1.setBounds(321, 450, 147, 14);
 		getContentPane().add(lblDireccion_1);
 
-		JLabel lblSexo_1 = new JLabel("Sexo");
+		lblSexo_1 = new JLabel("Sexo");
 		lblSexo_1.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblSexo_1.setBounds(64, 374, 49, 14);
 		getContentPane().add(lblSexo_1);
@@ -166,8 +175,8 @@ public class Register extends JDialog implements ActionListener {
 		lblCamposObligatorios.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblCamposObligatorios.setBounds(122, 550, 286, 14);
 		getContentPane().add(lblCamposObligatorios);
+		
 		checkBoxUsuario = new JCheckBox("Usuario", false);
-		checkBoxUsuario.addActionListener(this);
 		checkBoxUsuario.setBackground(new Color(255, 255, 255));
 		getContentPane().add(checkBoxUsuario);
 		checkBoxUsuario.setBounds(64, 507, 99, 23);
@@ -178,9 +187,8 @@ public class Register extends JDialog implements ActionListener {
 		getContentPane().add(checkBoxTrabajador);
 		checkBoxTrabajador.setBounds(162, 507, 99, 23);
 		getContentPane().add(checkBoxTrabajador);
-		checkBoxTrabajador.addActionListener(this);
 
-		JLabel Seleccione = new JLabel("Seleccione");
+		Seleccione = new JLabel("Seleccione");
 		Seleccione.setFont(new Font("Tahoma", Font.BOLD, 11));
 		Seleccione.setBounds(64, 467, 131, 14);
 		getContentPane().add(Seleccione);
@@ -234,31 +242,29 @@ public class Register extends JDialog implements ActionListener {
 		
 		lblInicioSesion = new JLabel("Inicia Sesion");
 		lblInicioSesion.setBounds(375, 650, 78, 13);
-		lblInicioSesion.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				inicioSesion(oscuro);
-			}
-		});
+		lblInicioSesion.addMouseListener(this);
 		lblInicioSesion.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblInicioSesion.setForeground(new Color(0, 51, 255));
 		getContentPane().add(lblInicioSesion);
 		
-		//if (oscuro) {
-		//	cambioFondo();
-//	}
+		if (oscuro) {
+			cambioFondo();
+		}
+		
+		// Botones de eventos
+		checkBoxUsuario.addActionListener(this);
+		checkBoxTrabajador.addActionListener(this);
 	}
 
-
-	protected void inicioSesion(boolean oscuro) {
-		Login log = new Login(cont, oscuro);
+	protected void inicioSesion(Controlador controladorRutas, boolean oscuro) {
+		Login log = new Login(controladorRutas, oscuro);
 		log.setVisible(true);
 		setVisible(false);
 		
 	}
 	
-/*	private void cambioFondo() {
-		contentPane.setBackground(Color.DARK_GRAY);
+	private void cambioFondo() {
+		//contentPane.setBackground(Color.DARK_GRAY); Acá creo que debo ver si viene del padre
 		lblFechaDeRegistro.setForeground(Color.WHITE);
 		lblConfirmarEmail.setForeground(Color.WHITE);
 		lblConfirmeLaContrasea.setForeground(Color.WHITE);
@@ -274,18 +280,19 @@ public class Register extends JDialog implements ActionListener {
 		lblNmeroSeguridadSocial.setForeground(Color.WHITE);
 		lblPregunta.setForeground(Color.WHITE);
 		lblSexo_1.setForeground(Color.WHITE);
-		
-	}*/
-	/**
-	 * 
-	 */
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		inicioSesion(controladorRutas, oscuro);
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(btnRegistro)) {
 			if (camposObligatoriosCompletos() == true) {
 				registrarPersona();
 			}
-
 		}
 		if (e.getSource().equals(checkBoxUsuario)) {
 			seleccionarUsuario();
@@ -304,17 +311,16 @@ public class Register extends JDialog implements ActionListener {
 	}
 
 	private boolean camposObligatoriosCompletos() {
-
 		boolean correcto = false;
 		char[] contrasena = passContrasena.getPassword();
 		char[] confirmarContrasena = passConfirmar.getPassword();
-		// comprobacion de que todos los campos que sean rellenados
-		// si los campos obligatorios no estan rellenados salta el mensaje de error
+		
+		// Comprobacion de que todos los campos que sean rellenados 
+		// Si los campos obligatorios no estan rellenados salta el mensaje de error
 		if (!textNombre.getText().isEmpty() && contrasena.length > 0 && !textEmail.getText().isEmpty()
 				&& confirmarContrasena.length > 0 && (checkBoxUsuario.isSelected() || checkBoxTrabajador.isSelected())
 				&& dateFechaNacimiento.getDate() != null) {
 			correcto = true;
-
 		}
 		return correcto;
 	}
@@ -328,7 +334,6 @@ public class Register extends JDialog implements ActionListener {
 			lblFechaDeRegistro.setVisible(true);
 			dateFRegistro.setVisible(true);
 			checkBoxTrabajador.setSelected(false);
-
 		}
 	}
 
@@ -351,33 +356,39 @@ public class Register extends JDialog implements ActionListener {
 			persona = new Usuario();
 			cargarDatosComunes(persona);
 
-			((Usuario) persona)
-					.setFechaRegistro(dateFRegistro.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			((Usuario) persona).setFechaRegistro(dateFRegistro.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
 		} else if (checkBoxTrabajador.isSelected()) {
 			persona = new Trabajador();
 
 			cargarDatosComunes(persona);
 			((Trabajador) persona).setNnss(textNumeroSS.getText());
-
 		}
 
+		// Comprobamos a traves de la interfaz si la cuenta existe
 		Controlador.registrarUsuario(persona);
 	}
 
 	private void cargarDatosComunes(Persona persona) {
-
 		persona.setApellido(textApellido.getText());
 		persona.setNombre(textNombre.getText());
 		persona.setDni(textDni.getText());
 		persona.setEmail(textEmail.getText());
-		persona.setFechaNacimiento(
-				dateFechaNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		persona.setFechaNacimiento(dateFechaNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		persona.setDireccion(textDireccion.getText());
 		persona.setContrasena(new String(passContrasena.getPassword()));
 		persona.setGenero((Sexo) comboBoxGenero.getSelectedItem());
 
 	}
-	// }
+	
+	// Implementación de los métodos MouseListener (no son necesarios, pero necesito implemenetarlos en la clase si quiero hacer lo de los eventos)
+    @Override
+    public void mousePressed(MouseEvent e) {}
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+    @Override
+    public void mouseExited(MouseEvent e) {}
 
 }
