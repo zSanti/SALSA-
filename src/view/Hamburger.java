@@ -10,6 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import clases.Persona;
 import controller.Controlador;
 import controller.Dao;
 
@@ -26,9 +27,10 @@ public class Hamburger extends JDialog {
 	private JPanel panel2;
 
 	// Controlador
-	private Controlador cont;
+	private Controlador controladorRutas;
 	private Dao dao;
 	private Login login;
+	private Persona persona;
 
 	/**
 	 * Create the frame.
@@ -127,7 +129,7 @@ public class Hamburger extends JDialog {
 	}
 
 	protected void logout(boolean oscuro) {
-		Login log = new Login(cont, oscuro);
+		Login log = new Login(controladorRutas, persona, oscuro);
 		log.setVisible(true);
 		setVisible(false);
 	}
@@ -152,7 +154,7 @@ public class Hamburger extends JDialog {
 	}
 
 	protected void inicio(boolean oscuro) {
-		Main index = new Main(login, oscuro, cont);
+		Main index = new Main(login, oscuro, controladorRutas);
 		index.setVisible(true);
 		setVisible(false);
 	}
