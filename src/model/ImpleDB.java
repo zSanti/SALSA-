@@ -102,20 +102,24 @@ public class ImpleDB implements Dao {
 			stm.executeUpdate();
 			stm.close();
 			// Inserción en la tabla trabajador (simplemente inserta el DNI)
+			if (per instanceof Trabajador) {
 
-			stm = conn.prepareStatement(ALTA_TRABAJADOR);
-			stm.setString(1, per.getDni());
-			stm.setString(2, ((Trabajador) per).getNnss());
-			stm.executeUpdate();
-			stm.close();
-			// Inserción en la tabla usuario (simplemente inserta el DNI y la fecha de
-			// registro)
+				stm = conn.prepareStatement(ALTA_TRABAJADOR);
+				stm.setString(1, per.getDni());
+				stm.setString(2, ((Trabajador) per).getNnss());
+				stm.executeUpdate();
+				stm.close();
+			} else if (per instanceof Usuario) {
+				// Inserción en la tabla usuario (simplemente inserta el DNI y la fecha de
+				// registro)
 
-			stm = conn.prepareStatement(ALTA_USUARIO);
-			stm.setString(1, per.getDni());
-			stm.setString(2, ((Usuario) per).getFechaRegistro().toString()); // Fecha de registro actual
-			stm.executeUpdate();
-			stm.close();
+				stm = conn.prepareStatement(ALTA_USUARIO);
+				stm.setString(1, per.getDni());
+				stm.setString(2, ((Usuario) per).getFechaRegistro().toString()); // Fecha de registro actual
+				stm.executeUpdate();
+				stm.close();
+			}
+
 			// Si todas las inserciones fueron exitosas, retorna true
 			return true;
 		} catch (SQLException e) {
