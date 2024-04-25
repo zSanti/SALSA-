@@ -257,7 +257,7 @@ public class Register extends JDialog implements ActionListener, MouseListener {
 	}
 
 	protected void inicioSesion(Controlador controladorRutas, boolean oscuro) {
-		Login log = new Login(controladorRutas, oscuro);
+		Login log = new Login(controladorRutas, persona, oscuro);
 		log.setVisible(true);
 		setVisible(false);
 		

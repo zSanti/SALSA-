@@ -35,6 +35,7 @@ public class Login extends JFrame implements ActionListener, MouseListener {
 	// Lógica para la conexión
 	private Controlador controladorRutas;
 	private Persona persona;
+	private boolean oscuro;
 
 	// Página de Inicio
 	public Login(Controlador controladorRutas, Persona persona, boolean oscuro) {
@@ -137,7 +138,7 @@ public class Login extends JFrame implements ActionListener, MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getSource().equals(linkRegister)) {
-			Register registro = new Register(this, true);
+			Register registro = new Register(this, controladorRutas, true, oscuro);
 			registro.setVisible(true);
 			setVisible(false);
 		}
