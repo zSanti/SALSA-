@@ -4,27 +4,31 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import controller.Controlador;
 import controller.Dao;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Administracion extends JFrame {
+public class Administracion extends JDialog {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane, panelAdvise;
     private JLabel lblAdvise1, lblAdvise2, lblAdvise3;
+    
+    // Lógica para la conexión
+	private Controlador controladorRutas;
 
-    public Administracion(Dao dao, boolean oscuro) {
+    public Administracion(Controlador controladorRutas, boolean oscuro) {
+    	this.controladorRutas = controladorRutas;
+    	
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 669, 692);
         contentPane = new JPanel();
@@ -86,7 +90,7 @@ public class Administracion extends JFrame {
         JButton btnInsertarNuevoArtculo = new JButton("Insertar Nuevo Artículo");
         btnInsertarNuevoArtculo.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		insertDat(dao, oscuro);
+        		insertDat(controladorRutas, oscuro);
         	}
         });
         btnInsertarNuevoArtculo.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -96,7 +100,7 @@ public class Administracion extends JFrame {
         JButton btnVolver = new JButton("Volver");
         btnVolver.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		volver(dao ,oscuro);
+        		volver(controladorRutas ,oscuro);
         	}
         });
         btnVolver.setBounds(10, 10, 85, 21);
@@ -115,8 +119,8 @@ public class Administracion extends JFrame {
 		lblAdvise3.setForeground(Color.WHITE);
 	}
 
-	protected void insertDat(Dao dao, boolean oscuro) {
-		InsertDatosArticulo insert = new InsertDatosArticulo(dao, oscuro);
+	protected void insertDat(Controlador controladorRutas, boolean oscuro) {
+		InsertDatosArticulo insert = new InsertDatosArticulo(controladorRutas, oscuro);
 		insert.setVisible(true);
 		setVisible(false);
 	}
@@ -134,8 +138,8 @@ public class Administracion extends JFrame {
 		
 	}
 
-	protected void volver(Dao dao, boolean oscuro) {
-		Hamburger ham = new Hamburger(dao, oscuro);
+	protected void volver(Controlador controladorRutas, boolean oscuro) {
+		Hamburger ham = new Hamburger(controladorRutas, oscuro);
 		ham.setVisible(true);
 		setVisible(false);
 	}

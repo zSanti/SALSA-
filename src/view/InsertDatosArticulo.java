@@ -24,17 +24,19 @@ public class InsertDatosArticulo extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private JTextField tfModelo, tfNombre, tfPrecio, tfStock, tfColor, tfCodArticulo;
-	private JTextField tfPorcentaje;
+	private JTextField tfModelo, tfNombre, tfPrecio, tfStock, tfColor, tfCodArticulo, tfPorcentaje;
 	private JComboBox<Temporada> comboBoxTemporada;
-	JButton btnSubirDatos;
-	private static Dao dao;
+	private JButton btnSubirDatos;
+	
+	// Lógica para la conexión
+	private Controlador controladorRutas;
 
 	/**
 	 * Create the dialog.
 	 */
-	public InsertDatosArticulo(Dao dao, boolean oscuro) {
-		this.dao = dao;
+	public InsertDatosArticulo(Controlador controladorRutas, boolean oscuro) {
+		this.controladorRutas = controladorRutas;
+		
 		setBounds(100, 100, 859, 704);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -144,7 +146,7 @@ public class InsertDatosArticulo extends JDialog {
 
 	private void subirDatos() {
 		Articulo art = new Articulo();
-		dao.altaArticulo(art);
+		controladorRutas.altaArticulo(art);
 	}
 
 	public void cargarDatosArticulo(Articulo articulo) throws CreateException {
