@@ -6,48 +6,41 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import clases.Persona;
 import controller.Controlador;
 
-public class Login extends JFrame implements ActionListener {
+public class Login extends JFrame implements ActionListener, MouseListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	private JPanel BodyLayout;
-	private JLabel logo;
+	private JPanel BodyLayout, panelLeft, panelRight;
+	private JLabel logo, labelEmail, labelPassword, labelNoRegister, linkRegister;
 	private JTextField inputEmail;
 	private JPasswordField inputPassword;
-	private JButton toggleButton;
-	private JButton btnLogin;
-	private Controlador cont;
+	private JButton toggleButton, btnLogin;
 
-	/**
-	 * Launch the application.
-	 */
+	// Lógica para la conexión
+	private Controlador controladorRutas;
+	private Persona persona;
 
-	/**
-	 * Create the frame.
-	 * 
-	 * @param cont
-	 * 
-	 * @param oscuro
-	 */
-	public Login(Controlador cont, boolean oscuro) {
-		this.cont = cont;
+	// Página de Inicio
+	public Login(Controlador controladorRutas, Persona persona, boolean oscuro) {
+		this.controladorRutas = controladorRutas;
+		this.persona = persona;
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 931, 574);
 		BodyLayout = new JPanel();
@@ -58,30 +51,25 @@ public class Login extends JFrame implements ActionListener {
 		ImageIcon icon = new ImageIcon(getClass().getResource("/assets/logo.png"));
 
 		// Division Login
-		JPanel panelLeft = new JPanel();
+		panelLeft = new JPanel();
 		panelLeft.setBackground(new Color(0, 128, 255));
 		panelLeft.setBounds(0, 0, 416, 539);
 		BodyLayout.add(panelLeft);
 		panelLeft.setLayout(null);
 
-		JPanel panelRight = new JPanel();
+		panelRight = new JPanel();
 		panelRight.setBackground(new Color(255, 255, 255));
 		panelRight.setBounds(414, 0, 501, 539);
 		BodyLayout.add(panelRight);
 		panelRight.setLayout(null);
 
-		toggleButton = new JButton(new ImageIcon(getClass().getResource("/assets/icons/nover.png"))); // Establece el
-																										// icono "nover"
-																										// por defecto
+		// Establece el icono "nover" por defecto
+		toggleButton = new JButton(new ImageIcon(getClass().getResource("/assets/icons/nover.png")));
 		toggleButton.setBounds(412, 313, 29, 20);
-		toggleButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				togglePasswordVisibility();
-			}
-		});
-		toggleButton.setOpaque(false); // Establece el botón como transparente
-		toggleButton.setContentAreaFilled(false); // No rellena el área del botón
+		// Establece el botón como transparente
+		toggleButton.setOpaque(false);
+		// No rellena el área del botón
+		toggleButton.setContentAreaFilled(false);
 		toggleButton.setBorderPainted(false);
 		panelRight.add(toggleButton);
 
@@ -93,7 +81,7 @@ public class Login extends JFrame implements ActionListener {
 				icon.getImage().getScaledInstance(logo.getWidth(), logo.getHeight(), Image.SCALE_SMOOTH));
 		logo.setIcon(img);
 
-		JLabel labelEmail = new JLabel("Correo electrónico");
+		labelEmail = new JLabel("Correo electrónico");
 		labelEmail.setBounds(74, 171, 123, 14);
 		panelRight.add(labelEmail);
 
@@ -102,7 +90,7 @@ public class Login extends JFrame implements ActionListener {
 		inputEmail.setColumns(10);
 		panelRight.add(inputEmail);
 
-		JLabel labelPassword = new JLabel("Contraseña");
+		labelPassword = new JLabel("Contraseña");
 		labelPassword.setBounds(74, 270, 123, 14);
 		panelRight.add(labelPassword);
 
@@ -114,65 +102,123 @@ public class Login extends JFrame implements ActionListener {
 		btnLogin.setBounds(74, 381, 378, 45);
 		panelRight.add(btnLogin);
 
-		JLabel labelNoRegister = new JLabel("¿No tienes cuenta? Click aquí para");
-		labelNoRegister.setBounds(74, 454, 199, 14);
-		labelNoRegister.setHorizontalAlignment(SwingConstants.CENTER);
+		labelNoRegister = new JLabel("¿No tienes cuenta? Click aquí para");
+		labelNoRegister.setBounds(74, 454, 227, 14);
+		labelNoRegister.setHorizontalAlignment(SwingConstants.LEFT);
 		panelRight.add(labelNoRegister);
 
-		JLabel linkRegister = new JLabel("registrarme");
-		linkRegister.setBounds(272, 454, 75, 14);
+		linkRegister = new JLabel("registrarme");
+		linkRegister.setBounds(274, 454, 75, 14);
 		linkRegister.setFont(new Font("Tahoma", Font.BOLD, 11));
 		linkRegister.setForeground(new Color(0, 128, 255));
 		linkRegister.setHorizontalAlignment(SwingConstants.LEFT);
-		linkRegister.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				registro(oscuro);
-			}
-		});
 		panelRight.add(linkRegister);
+
+		// Botones de eventos
+		linkRegister.addMouseListener(this);
+		btnLogin.addActionListener(this);
+		toggleButton.addActionListener(this);
 
 	}
 
+	// Visualizar/Desvisualizar la contraseña
 	private void togglePasswordVisibility() {
-		char echoChar = (inputPassword.getEchoChar() == '\u2022') ? '\u0000' : '\u2022';
 		// Si el echoChar es '•', cambiar a mostrar texto, de lo contrario, ocultar
 		// texto
-		inputPassword.setEchoChar(echoChar); // Establecer el echoChar según la lógica anterior
+		char echoChar = (inputPassword.getEchoChar() == '\u2022') ? '\u0000' : '\u2022';
+		// Establecer el echoChar según la lógica anterior
+		inputPassword.setEchoChar(echoChar);
+		// Cambiar el icono según el echoChar
 		toggleButton.setIcon((echoChar == '\u2022') ? new ImageIcon(getClass().getResource("/assets/icons/ver.png"))
-				: new ImageIcon(getClass().getResource("/assets/icons/nover.png"))); // Cambiar el icono según el
-																						// echoChar
+				: new ImageIcon(getClass().getResource("/assets/icons/nover.png")));
+	}
+
+	// Métodos para ahorrar los action listener
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		if (e.getSource().equals(linkRegister)) {
+			Register registro = new Register(this, true);
+			registro.setVisible(true);
+			setVisible(false);
+		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
+		if (e.getSource().equals(toggleButton)) {
+			togglePasswordVisibility();
+		}
 		if (e.getSource().equals(btnLogin)) {
-			login();
+			logicaLogin();
+		}
+	}
+
+	public void logicaLogin() {
+		// Obtener los valores de correo electrónico y contraseña de los campos de
+		// entrada
+		String email = inputEmail.getText().trim();
+		String password = new String(inputPassword.getPassword());
+		boolean correcto = false;
+		// Establezco los datos introducidos en los campos de email y contraseña al
+		// objeto persona
+		persona.setEmail(email);
+		persona.setContrasena(password);
+
+		// Comprobamos a traves de la interfaz si la cuenta existe
+		controladorRutas = new Controlador();
+		persona = controladorRutas.iniciarSesion(persona);
+
+		// Si la persona no tiene ningún dato le mandamos error
+		correcto = camposVacios(correcto);
+		if (correcto == true) {
+			borrar();
+			JOptionPane.showMessageDialog(this, "Por favor, introduzca todos los campos obligatorios.",
+					"Campos obligatorios incompletos", JOptionPane.ERROR_MESSAGE); // Muestra un mensaje de error
+		} else {
+
+			if (persona != null) {
+				Main ven = new Main(this, true, controladorRutas);
+				super.dispose();
+				ven.setVisible(true);
+			}
 		}
 
 	}
 
-	private void login() {
-		if (btnLogin.isSelected()) {
-			Main ven = new Main(this, true, cont);
-			super.dispose();
-			ven.setVisible(true);
+	// Metodo para recoger los campos vacios de los input
+	private boolean camposVacios(boolean correcto) {
+		if (inputEmail.getText().trim().isEmpty() || new String(inputPassword.getPassword()).trim().isEmpty()) {
+			correcto = true;
+		} else {
+			correcto = false;
 		}
+		return correcto;
+
 	}
 
-	protected void registro(boolean oscuro) {
+	// Limpiamos los datos tecleados del formulario
+	private void borrar() {
+		inputEmail.setText("");
+		inputEmail.requestFocus();
+		inputPassword.setText("");
+	}
 
-		// Crear una instancia de la vista Login
+	// Implementación de los métodos MouseListener (no son necesarios, pero necesito
+	// implemenetarlos en la clase si quiero hacer lo de los eventos)
+	@Override
+	public void mousePressed(MouseEvent e) {
+	}
 
-		Register registro = new Register(this, true);
+	@Override
+	public void mouseReleased(MouseEvent e) {
+	}
 
-		// Cerramos
-		super.dispose();
-		registro.setVisible(true);
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
 
-		// this.setVisible(false);
-
+	@Override
+	public void mouseExited(MouseEvent e) {
 	}
 
 }
