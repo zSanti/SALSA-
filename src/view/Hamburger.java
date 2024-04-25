@@ -18,17 +18,11 @@ public class Hamburger extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JButton btnIndex;
-	private JButton btnSettings;
-	private JButton btnContact;
-	private JButton btnAdministration;
-	private JButton btnLogout;
-	private JPanel panel;
-	private JPanel panel2;
+	private JButton btnIndex, btnSettings, btnContact, btnAdministration, btnLogout;
+	private JPanel panel, panel2;
 
 	// Controlador
 	private Controlador controladorRutas;
-	private Dao dao;
 	private Login login;
 	private Persona persona;
 
@@ -36,15 +30,14 @@ public class Hamburger extends JDialog {
 	 * Create the frame.
 	 */
 	public Hamburger() {
-		Hamburguesa(dao, false);
+		Hamburguesa(controladorRutas, false);
 	}
 
-	public Hamburger(Dao dao, boolean oscuro) {
-		Hamburguesa(dao, oscuro);
+	public Hamburger(Controlador controladorRutas, boolean oscuro) {
+		Hamburguesa(controladorRutas, oscuro);
 	}
 
-
-	public void Hamburguesa(Dao dao ,boolean oscuro) {
+	public void Hamburguesa(Controlador controladorRutas ,boolean oscuro) {
 
 		setBounds(100, 100, 700, 709);
 		contentPane = new JPanel();
@@ -97,7 +90,7 @@ public class Hamburger extends JDialog {
 		btnAdministration.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				administracion(oscuro);
+				administracion(controladorRutas, oscuro);
 			}
 		});
 		btnAdministration.setBounds(240, 373, 202, 42);
@@ -134,8 +127,8 @@ public class Hamburger extends JDialog {
 		setVisible(false);
 	}
 
-	protected void administracion(boolean oscuro) {
-		Administracion admin = new Administracion(dao, oscuro);
+	protected void administracion(Controlador controladorRutas, boolean oscuro) {
+		Administracion admin = new Administracion(controladorRutas, oscuro);
 		admin.setVisible(true);
 		setVisible(false);
 
@@ -148,7 +141,7 @@ public class Hamburger extends JDialog {
 	}
 
 	protected void ajustes(boolean oscuro) {
-		Ajustes settings = new Ajustes(dao ,oscuro);
+		Ajustes settings = new Ajustes(controladorRutas ,oscuro);
 		settings.setVisible(true);
 		setVisible(false);
 	}
