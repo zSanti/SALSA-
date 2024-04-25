@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controller.Controlador;
-import controller.Dao;
 
 public class Main extends JDialog {
 
@@ -24,12 +23,10 @@ public class Main extends JDialog {
 	private JButton btnCamisetas, btnSudaderas, btnPantalones, btnIniciarSesion;
 
 	// Interfaz
-	private Dao dao;
 
-	public Main(boolean oscuro, Dao dao, Controlador cont, Register padre, boolean modal) {
-		super(padre);
+	public Main(Login login, boolean modal, Controlador cont) {
+		super(login);
 		setModal(modal);
-		this.dao = dao;
 		setBounds(100, 100, 1082, 836);
 		BodyLayout = new JPanel();
 		BodyLayout.setBackground(new Color(255, 255, 255));
@@ -95,4 +92,5 @@ public class Main extends JDialog {
 			itemsPanel.add(item);
 		}
 	}
+
 }

@@ -3,16 +3,14 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.util.Enumeration;
 
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -27,8 +25,8 @@ public class InsertDatosArticulo extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField tfModelo, tfNombre, tfPrecio, tfStock, tfColor, tfCodArticulo;
-	private final ButtonGroup btnTemporadaGroup = new ButtonGroup();
 	private JTextField tfPorcentaje;
+	private JComboBox<Temporada> comboBoxTemporada;
 	JButton btnSubirDatos;
 	private static Dao dao;
 
@@ -93,32 +91,8 @@ public class InsertDatosArticulo extends JDialog {
 		lblNombre.setFont(new Font("Dialog", Font.BOLD, 14));
 		contentPanel.add(lblNombre);
 
-		JRadioButton rbtVerano = new JRadioButton("Verano");
-		btnTemporadaGroup.add(rbtVerano);
-		rbtVerano.setBounds(103, 249, 103, 21);
-		rbtVerano.setFont(new Font("Tahoma", Font.BOLD, 14));
-		contentPanel.add(rbtVerano);
-
-		JRadioButton rbtPrimavera = new JRadioButton("Primavera");
-		btnTemporadaGroup.add(rbtPrimavera);
-		rbtPrimavera.setBounds(103, 288, 103, 21);
-		rbtPrimavera.setFont(new Font("Dialog", Font.BOLD, 14));
-		contentPanel.add(rbtPrimavera);
-
-		JRadioButton rbtOtonio = new JRadioButton("Otoño");
-		btnTemporadaGroup.add(rbtOtonio);
-		rbtOtonio.setBounds(103, 324, 103, 21);
-		rbtOtonio.setFont(new Font("Dialog", Font.BOLD, 14));
-		contentPanel.add(rbtOtonio);
-
-		JRadioButton rbtInvierno = new JRadioButton("Invierno");
-		btnTemporadaGroup.add(rbtInvierno);
-		rbtInvierno.setBounds(103, 358, 103, 21);
-		rbtInvierno.setFont(new Font("Dialog", Font.BOLD, 14));
-		contentPanel.add(rbtInvierno);
-
 		JLabel lblPrecio = new JLabel("Precio");
-		lblPrecio.setBounds(103, 409, 56, 35);
+		lblPrecio.setBounds(107, 316, 56, 35);
 		lblPrecio.setFont(new Font("Dialog", Font.BOLD, 14));
 		contentPanel.add(lblPrecio);
 
@@ -128,30 +102,38 @@ public class InsertDatosArticulo extends JDialog {
 		contentPanel.add(lblStock);
 
 		tfPrecio = new JTextField();
-		tfPrecio.setBounds(169, 409, 225, 35);
+		tfPrecio.setBounds(103, 366, 225, 35);
 		tfPrecio.setColumns(10);
 		contentPanel.add(tfPrecio);
 
 		tfStock = new JTextField();
-		tfStock.setBounds(598, 410, 142, 35);
+		tfStock.setBounds(537, 454, 142, 35);
 		tfStock.setColumns(10);
 		contentPanel.add(tfStock);
 
 		btnSubirDatos = new JButton("Subir Datos");
-		btnSubirDatos.setBounds(262, 564, 359, 60);
+		btnSubirDatos.setBounds(250, 552, 359, 60);
 		btnSubirDatos.setFont(new Font("Dialog", Font.BOLD, 18));
 		contentPanel.add(btnSubirDatos);
 
 		JLabel lblPorcentaje = new JLabel("Porcentaje de descuento");
 		lblPorcentaje.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblPorcentaje.setBounds(198, 474, 196, 35);
+		lblPorcentaje.setBounds(103, 409, 196, 35);
 		contentPanel.add(lblPorcentaje);
 
 		tfPorcentaje = new JTextField();
 		tfPorcentaje.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		tfPorcentaje.setColumns(10);
-		tfPorcentaje.setBounds(418, 476, 225, 35);
+		tfPorcentaje.setBounds(103, 454, 225, 35);
 		contentPanel.add(tfPorcentaje);
+
+		comboBoxTemporada = new JComboBox<>();
+		comboBoxTemporada.setFont(new Font("Dialog", Font.BOLD, 14));
+		comboBoxTemporada.setModel(new DefaultComboBoxModel<>(Temporada.values()));
+		comboBoxTemporada.setToolTipText("");
+		comboBoxTemporada.setEditable(true);
+		comboBoxTemporada.setBounds(103, 256, 196, 28);
+		contentPanel.add(comboBoxTemporada);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -166,7 +148,7 @@ public class InsertDatosArticulo extends JDialog {
 	}
 
 	public void cargarDatosArticulo(Articulo articulo) throws CreateException {
-		Temporada temp;
+
 		// guardamos el texto de tf en una variable
 		String cod = tfCodArticulo.getText();
 		// luego parseamos dicha variable
@@ -181,18 +163,7 @@ public class InsertDatosArticulo extends JDialog {
 		int precio2 = Integer.parseInt(precio);
 		articulo.setPrecio(precio2);
 		articulo.setModelo(tfModelo.getText());
-		Enumeration<AbstractButton> botonesTemporada = btnTemporadaGroup.getElements();
-		while (botonesTemporada.hasMoreElements()) {
-
-			JRadioButton btnTempo = (JRadioButton) botonesTemporada.nextElement();
-
-			if (btnTempo.isSelected()) {
-				String texTemporada = btnTempo.getText();
-
-				temp = Temporada.valueOf(texTemporada);
-			}
-
-		}
+		articulo.setTemporada((Temporada) comboBoxTemporada.getSelectedItem());
 		// para la creacion de un a excepcion pero hay que mirarlo, no se si esta bien
 		Controlador.altaArticulo(articulo);
 	}

@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.CheckboxGroup;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -10,19 +9,17 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.ZoneId;
-import java.util.Enumeration;
 
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
@@ -36,19 +33,16 @@ import controller.Controlador;
 public class Register extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JTextField textNombre, textEmail, textContraseña, textDni, textApellido, tFEmailConfirmado, tFContraeñaConfirmada, textDireccion, textNumeroSS;
-	private ButtonGroup generoGrupo = new ButtonGroup();
+
+	private JTextField textNombre, textEmail, textDni, textApellido, tFEmailConfirmado, textDireccion, textNumeroSS;
 	private JCheckBox checkBoxUsuario, checkBoxTrabajador;
 	private JButton btnRegistro;
 	private JDateChooser dateFRegistro, dateFechaNacimiento;
-	private JRadioButton rBFemenino, rBMasculino, rBOtros;
-	private static Controlador cont;
-	private JLabel lblFechaDeRegistro, lblIniciaSesion, lblPregunta, lblInicioSesion, lblNombre, lblEmail, lblContrasena, lblDni, lblSexo_1, lblPrimerApellido, lblConfirmarEmail, lblConfirmeLaContrasea, lblDireccion, lblNmeroSeguridadSocial, Seleccione, lblCamposObligatorios, lblFecNa;
-	private JPasswordField passConfirmar;
-	private JPasswordField passContrasena;
+	private JLabel lblFechaDeRegistro, lblNmeroSeguridadSocial;
+	private JPasswordField passConfirmar, passContrasena;
+	private JComboBox<Sexo> comboBoxGenero;
 
-	public Register(Controlador cont, Login padre, boolean modal, boolean oscuro) {
+	public Register(Login padre, boolean modal) {
 		super(padre);
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -57,7 +51,6 @@ public class Register extends JDialog implements ActionListener {
 			}
 		});
 		setModal(modal);
-		this.cont = cont;
 		setSize(729, 700);
 		getContentPane().setFont(new Font("Dialog", Font.BOLD, 12));
 		getContentPane().setBackground(new Color(255, 255, 255));
@@ -98,21 +91,6 @@ public class Register extends JDialog implements ActionListener {
 		lblDni.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblDni.setBounds(64, 296, 147, 14);
 		getContentPane().add(lblDni);
-
-		// Grupo de sexo
-		generoGrupo = new ButtonGroup();
-
-		rBFemenino = new JRadioButton("Femenino");
-		generoGrupo.add(rBFemenino);
-		rBFemenino.setBackground(new Color(255, 255, 255));
-		rBFemenino.setBounds(64, 395, 111, 23);
-		getContentPane().add(rBFemenino);
-
-		rBMasculino = new JRadioButton("Masculino");
-		generoGrupo.add(rBMasculino);
-		rBMasculino.setBackground(new Color(255, 255, 255));
-		rBMasculino.setBounds(190, 395, 111, 23);
-		getContentPane().add(rBMasculino);
 
 		JLabel lblSexo = new JLabel("Fecha de nacimiento ");
 		lblSexo.setFont(new Font("Dialog", Font.BOLD, 12));
@@ -159,12 +137,6 @@ public class Register extends JDialog implements ActionListener {
 		lblNewLabel.setBounds(235, 11, 278, 62);
 		getContentPane().add(lblNewLabel);
 
-		rBOtros = new JRadioButton("Otros");
-		generoGrupo.add(rBOtros);
-		rBOtros.setBackground(new Color(255, 255, 255));
-		rBOtros.setBounds(64, 421, 111, 23);
-		getContentPane().add(rBOtros);
-
 		JLabel lblDireccion_1 = new JLabel("");
 		lblDireccion_1.setBounds(321, 450, 147, 14);
 		getContentPane().add(lblDireccion_1);
@@ -194,13 +166,6 @@ public class Register extends JDialog implements ActionListener {
 		lblCamposObligatorios.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblCamposObligatorios.setBounds(122, 550, 286, 14);
 		getContentPane().add(lblCamposObligatorios);
-		// if (checkBoxUsuario.isSelected()) {
-//		checkBoxUsuario = new JCheckBox("Usuario");
-//		checkBoxUsuario.addActionListener(this);
-//		checkBoxUsuario.setBackground(new Color(255, 255, 255));
-//		perfilGrupo.add(checkBoxUsuario);
-//		checkBoxUsuario.setBounds(64, 507, 99, 23);
-//		getContentPane().add(checkBoxUsuario);
 		checkBoxUsuario = new JCheckBox("Usuario", false);
 		checkBoxUsuario.addActionListener(this);
 		checkBoxUsuario.setBackground(new Color(255, 255, 255));
@@ -208,12 +173,6 @@ public class Register extends JDialog implements ActionListener {
 		checkBoxUsuario.setBounds(64, 507, 99, 23);
 		getContentPane().add(checkBoxUsuario);
 
-//		checkBoxTrabajador = new JCheckBox("Trabajador");
-//		checkBoxTrabajador.setBackground(new Color(255, 255, 255));
-//		perfilGrupo.add(checkBoxTrabajador);
-//		checkBoxTrabajador.setBounds(162, 507, 99, 23);
-//		getContentPane().add(checkBoxTrabajador);
-//		checkBoxTrabajador.addActionListener(this);
 		checkBoxTrabajador = new JCheckBox("Trabajador", false);
 		checkBoxTrabajador.setBackground(new Color(255, 255, 255));
 		getContentPane().add(checkBoxTrabajador);
@@ -252,6 +211,14 @@ public class Register extends JDialog implements ActionListener {
 		passContrasena = new JPasswordField();
 		passContrasena.setBounds(64, 256, 237, 29);
 		getContentPane().add(passContrasena);
+
+		comboBoxGenero = new JComboBox<>();
+		comboBoxGenero.setFont(new Font("Dialog", Font.BOLD, 14));
+		comboBoxGenero.setModel(new DefaultComboBoxModel<>(Sexo.values()));
+		comboBoxGenero.setToolTipText("");
+		comboBoxGenero.setEditable(true);
+		comboBoxGenero.setBounds(64, 406, 131, 21);
+		getContentPane().add(comboBoxGenero);
 
 		// No se muestran los campos específicos de cada perfil
 		// Deshabilitar el campo de número de seguridad social
@@ -330,18 +297,21 @@ public class Register extends JDialog implements ActionListener {
 			if (btnRegistro.isShowing() && camposObligatoriosCompletos() == false) {
 				JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.",
 						"Campos obligatorios incompletos", JOptionPane.ERROR_MESSAGE);
+			} else if (btnRegistro.isShowing() && camposObligatoriosCompletos() == true) {
+				this.dispose();
 			}
 		}
 	}
 
 	private boolean camposObligatoriosCompletos() {
+
 		boolean correcto = false;
 		char[] contrasena = passContrasena.getPassword();
 		char[] confirmarContrasena = passConfirmar.getPassword();
+		// comprobacion de que todos los campos que sean rellenados
+		// si los campos obligatorios no estan rellenados salta el mensaje de error
 		if (!textNombre.getText().isEmpty() && contrasena.length > 0 && !textEmail.getText().isEmpty()
-				&& confirmarContrasena.length > 0
-				&& (rBFemenino.isSelected() || rBMasculino.isSelected() || rBOtros.isSelected())
-				&& (checkBoxUsuario.isSelected() || checkBoxTrabajador.isSelected())
+				&& confirmarContrasena.length > 0 && (checkBoxUsuario.isSelected() || checkBoxTrabajador.isSelected())
 				&& dateFechaNacimiento.getDate() != null) {
 			correcto = true;
 
@@ -357,6 +327,7 @@ public class Register extends JDialog implements ActionListener {
 			// Mostrar el label y el campo de fecha de registro
 			lblFechaDeRegistro.setVisible(true);
 			dateFRegistro.setVisible(true);
+			checkBoxTrabajador.setSelected(false);
 
 		}
 	}
@@ -369,7 +340,7 @@ public class Register extends JDialog implements ActionListener {
 			// Mostrar el label y el campo de fecha de registro
 			lblFechaDeRegistro.setVisible(false);
 			dateFRegistro.setVisible(false);
-
+			checkBoxUsuario.setSelected(false);
 		}
 
 	}
@@ -395,7 +366,7 @@ public class Register extends JDialog implements ActionListener {
 	}
 
 	private void cargarDatosComunes(Persona persona) {
-		Sexo sexo;
+
 		persona.setApellido(textApellido.getText());
 		persona.setNombre(textNombre.getText());
 		persona.setDni(textDni.getText());
@@ -403,24 +374,10 @@ public class Register extends JDialog implements ActionListener {
 		persona.setFechaNacimiento(
 				dateFechaNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		persona.setDireccion(textDireccion.getText());
-
-		// Lo que hace es pasar esto a una lista todos los radio buttons
-		Enumeration<AbstractButton> radios = generoGrupo.getElements();
-		// Luego lo que haremos es recorrer todos los elementos de esta lista
-		while (radios.hasMoreElements()) {
-			// Obtiene el próximo elemento de laenumeración y lo asignamos a una variable
-			// radio
-			JRadioButton radio = (JRadioButton) radios.nextElement();
-
-			// Si coincide que el botón de radio esta seleccionado, agregamos su texto(que
-			// representa el sexo) al área de texto.
-
-			if (radio.isSelected()) {
-				String textRadio = radio.getText().toUpperCase();
-				sexo = Sexo.valueOf(textRadio);
-			}
-
-		}
+		persona.setContrasena(new String(passContrasena.getPassword()));
+		persona.setGenero((Sexo) comboBoxGenero.getSelectedItem());
 
 	}
+	// }
+
 }
