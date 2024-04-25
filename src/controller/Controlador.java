@@ -6,7 +6,10 @@ import model.ImpleDB;
 
 public class Controlador {
 
-	// creo puedo borrar esto :v
+	public Persona iniciarSesion(Persona per) {
+		Dao dao = new ImpleDB();
+		return dao.iniciarSesion(per);
+	}
 
 	public static boolean registrarUsuario(Persona per) {
 		Dao dao = new ImpleDB();
