@@ -6,14 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controller.Controlador;
-import controller.Dao;
 
-public class Hamburger extends JFrame {
+public class Hamburger extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -27,7 +26,7 @@ public class Hamburger extends JFrame {
 
 	// Controlador
 	private Controlador cont;
-	private Dao dao;
+	// private Dao dao;
 
 	/**
 	 * Create the frame.
@@ -41,7 +40,6 @@ public class Hamburger extends JFrame {
 	}
 
 	public void Hamburguesa(boolean oscuro) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 709);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

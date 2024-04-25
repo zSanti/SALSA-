@@ -8,7 +8,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.ZoneId;
 
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -37,7 +36,6 @@ public class Register extends JDialog implements ActionListener {
 	private JTextField textApellido;
 	private JTextField tFEmailConfirmado;
 	private JTextField textDireccion;
-	private ButtonGroup perfilGrupo = new ButtonGroup();
 	private JCheckBox checkBoxUsuario, checkBoxTrabajador;
 
 	private JTextField textNumeroSS;
@@ -289,6 +287,7 @@ public class Register extends JDialog implements ActionListener {
 			// Mostrar el label y el campo de fecha de registro
 			lblFechaDeRegistro.setVisible(true);
 			dateFRegistro.setVisible(true);
+			checkBoxTrabajador.setSelected(false);
 
 		}
 	}
@@ -301,7 +300,7 @@ public class Register extends JDialog implements ActionListener {
 			// Mostrar el label y el campo de fecha de registro
 			lblFechaDeRegistro.setVisible(false);
 			dateFRegistro.setVisible(false);
-
+			checkBoxUsuario.setSelected(false);
 		}
 
 	}

@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controller.Controlador;
-import controller.Dao;
 
 public class Main extends JDialog {
 
@@ -24,7 +23,6 @@ public class Main extends JDialog {
 	private JButton btnCamisetas, btnSudaderas, btnPantalones, btnIniciarSesion;
 
 	// Interfaz
-	private Dao dao;
 
 	public Main(Login login, boolean modal, Controlador cont) {
 		super(login);
