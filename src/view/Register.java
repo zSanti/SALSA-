@@ -8,6 +8,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.ZoneId;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -36,10 +37,7 @@ public class Register extends JDialog implements ActionListener {
 	private JTextField textApellido;
 	private JTextField tFEmailConfirmado;
 	private JTextField textDireccion;
-	// private ButtonGroup generoGrupo = new ButtonGroup();
-	// private ButtonGroup perfilGrupo = new ButtonGroup();
-	// He modificado esto para poder probar
-	// private CheckboxGroup perfilGrupo = new CheckboxGroup();
+	private ButtonGroup perfilGrupo = new ButtonGroup();
 	private JCheckBox checkBoxUsuario, checkBoxTrabajador;
 
 	private JTextField textNumeroSS;
@@ -177,13 +175,6 @@ public class Register extends JDialog implements ActionListener {
 		lblCamposObligatorios.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblCamposObligatorios.setBounds(122, 550, 286, 14);
 		getContentPane().add(lblCamposObligatorios);
-		// if (checkBoxUsuario.isSelected()) {
-//		checkBoxUsuario = new JCheckBox("Usuario");
-//		checkBoxUsuario.addActionListener(this);
-//		checkBoxUsuario.setBackground(new Color(255, 255, 255));
-//		perfilGrupo.add(checkBoxUsuario);
-//		checkBoxUsuario.setBounds(64, 507, 99, 23);
-//		getContentPane().add(checkBoxUsuario);
 		checkBoxUsuario = new JCheckBox("Usuario", false);
 		checkBoxUsuario.addActionListener(this);
 		checkBoxUsuario.setBackground(new Color(255, 255, 255));
@@ -191,12 +182,6 @@ public class Register extends JDialog implements ActionListener {
 		checkBoxUsuario.setBounds(64, 507, 99, 23);
 		getContentPane().add(checkBoxUsuario);
 
-//		checkBoxTrabajador = new JCheckBox("Trabajador");
-//		checkBoxTrabajador.setBackground(new Color(255, 255, 255));
-//		perfilGrupo.add(checkBoxTrabajador);
-//		checkBoxTrabajador.setBounds(162, 507, 99, 23);
-//		getContentPane().add(checkBoxTrabajador);
-//		checkBoxTrabajador.addActionListener(this);
 		checkBoxTrabajador = new JCheckBox("Trabajador", false);
 		checkBoxTrabajador.setBackground(new Color(255, 255, 255));
 		getContentPane().add(checkBoxTrabajador);

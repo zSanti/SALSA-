@@ -16,7 +16,7 @@ public class ImpleDB implements Dao {
 	// Objeto para crear conexión mysql
 
 	private Connection conn;
-
+	private PreparedStatement stm;
 	// Consultas a la Base de Datos
 	private final String ALTA_COMPROBAR_USUARIO = "SELECT dni, nombre, apellido, rol FROM persona WHERE email = ? AND contrasena = ?";
 	private final String ALTA_PERSONA = "INSERT INTO persona (dni, nombre, apellido, fechaNac, contrasena, direccion, email, genero) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -86,39 +86,36 @@ public class ImpleDB implements Dao {
 	@Override
 	public boolean registrarUsuario(Persona per) {
 		conn = ConnectionMysql.openConnection();
-		PreparedStatement stmtPersona = null;
-		PreparedStatement stmtTrabajador = null;
-		PreparedStatement stmtUsuario = null;
 
 		try {
 			// Inserción en la tabla persona
-			stmtPersona = conn.prepareStatement(ALTA_PERSONA);
-			stmtPersona.setString(1, per.getDni());
-			stmtPersona.setString(2, per.getNombre());
-			stmtPersona.setString(3, per.getApellido());
-			stmtPersona.setString(4, per.getFechaNacimiento().toString());
-			stmtPersona.setString(5, per.getContrasena());
-			stmtPersona.setString(6, per.getDireccion());
-			stmtPersona.setString(7, per.getEmail());
-			stmtPersona.setString(8, per.getGenero().toString());
+			stm = conn.prepareStatement(ALTA_PERSONA);
+			stm.setString(1, per.getDni());
+			stm.setString(2, per.getNombre());
+			stm.setString(3, per.getApellido());
+			stm.setString(4, per.getFechaNacimiento().toString());
+			stm.setString(5, per.getContrasena());
+			stm.setString(6, per.getDireccion());
+			stm.setString(7, per.getEmail());
+			stm.setString(8, per.getGenero().toString());
 			// stmtPersona.setString(9, per.getRol());
-			stmtPersona.executeUpdate();
-			stmtPersona.close();
+			stm.executeUpdate();
+			stm.close();
 			// Inserción en la tabla trabajador (simplemente inserta el DNI)
 
-			stmtTrabajador = conn.prepareStatement(ALTA_TRABAJADOR);
-			stmtTrabajador.setString(1, per.getDni());
-			stmtTrabajador.setString(2, ((Trabajador) per).getNnss());
-			stmtTrabajador.executeUpdate();
-			stmtTrabajador.close();
+			stm = conn.prepareStatement(ALTA_TRABAJADOR);
+			stm.setString(1, per.getDni());
+			stm.setString(2, ((Trabajador) per).getNnss());
+			stm.executeUpdate();
+			stm.close();
 			// Inserción en la tabla usuario (simplemente inserta el DNI y la fecha de
 			// registro)
 
-			stmtUsuario = conn.prepareStatement(ALTA_USUARIO);
-			stmtUsuario.setString(1, per.getDni());
-			stmtUsuario.setString(2, ((Usuario) per).getFechaRegistro().toString()); // Fecha de registro actual
-			stmtUsuario.executeUpdate();
-			stmtUsuario.close();
+			stm = conn.prepareStatement(ALTA_USUARIO);
+			stm.setString(1, per.getDni());
+			stm.setString(2, ((Usuario) per).getFechaRegistro().toString()); // Fecha de registro actual
+			stm.executeUpdate();
+			stm.close();
 			// Si todas las inserciones fueron exitosas, retorna true
 			return true;
 		} catch (SQLException e) {
@@ -126,20 +123,20 @@ public class ImpleDB implements Dao {
 			return false;
 		} finally {
 			try {
-				if (stmtPersona != null) {
-					stmtPersona.close();
+				if (stm != null) {
+					stm.close();
 				}
 			} catch (SQLException e) {
 			}
 			try {
-				if (stmtTrabajador != null) {
-					stmtTrabajador.close();
+				if (stm != null) {
+					stm.close();
 				}
 			} catch (SQLException e) {
 			}
 			try {
-				if (stmtUsuario != null) {
-					stmtUsuario.close();
+				if (stm != null) {
+					stm.close();
 				}
 			} catch (SQLException e) {
 			}
@@ -152,25 +149,25 @@ public class ImpleDB implements Dao {
 	@Override
 	public boolean altaArticulo(Articulo art) {
 		conn = ConnectionMysql.openConnection();
-		PreparedStatement stmArticulo = null;
+
 		try {
 			// insercion de la tabla articulo
-			stmArticulo = (conn.prepareStatement(ALTA_ARTICULO));
-			stmArticulo.setInt(1, art.getCodArticulo());
-			stmArticulo.setString(2, art.getColor());
-			stmArticulo.setString(3, art.getModelo());
-			stmArticulo.setString(4, art.getTemporada().toString());
-			stmArticulo.setFloat(5, art.getPrecio());
-			stmArticulo.setFloat(6, art.getPorcentajeDecuento());
-			stmArticulo.executeUpdate();
+			stm = (conn.prepareStatement(ALTA_ARTICULO));
+			stm.setInt(1, art.getCodArticulo());
+			stm.setString(2, art.getColor());
+			stm.setString(3, art.getModelo());
+			stm.setString(4, art.getTemporada().toString());
+			stm.setFloat(5, art.getPrecio());
+			stm.setFloat(6, art.getPorcentajeDecuento());
+			stm.executeUpdate();
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		} finally {
 			try {
-				if (stmArticulo != null) {
-					stmArticulo.close();
+				if (stm != null) {
+					stm.close();
 				}
 			} catch (SQLException e) {
 			}
