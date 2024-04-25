@@ -30,23 +30,12 @@ import controller.Controlador;
 public class Register extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField textNombre;
-	private JTextField textEmail;
-	private JTextField textDni;
-	private JTextField textApellido;
-	private JTextField tFEmailConfirmado;
-	private JTextField textDireccion;
+	private JTextField textNombre, textEmail, textDni, textApellido, tFEmailConfirmado, textDireccion, textNumeroSS;
 	private JCheckBox checkBoxUsuario, checkBoxTrabajador;
-
-	private JTextField textNumeroSS;
 	private JButton btnRegistro;
-	private JDateChooser dateFRegistro;
-	private JDateChooser dateFechaNacimiento;
-	private JLabel lblFechaDeRegistro;
-	private JLabel lblNmeroSeguridadSocial;
-	private JPasswordField passConfirmar;
-	private JPasswordField passContrasena;
-
+	private JDateChooser dateFRegistro, dateFechaNacimiento;
+	private JLabel lblFechaDeRegistro, lblNmeroSeguridadSocial;
+	private JPasswordField passConfirmar, passContrasena;
 	private JComboBox<Sexo> comboBoxGenero;
 
 	public Register(Login padre, boolean modal) {
